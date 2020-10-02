@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cook Starter</string>
+    <string name="action_settings">Настройки</string>
+    <string name="find_restaurant">Найти ресторан</string>
+    <string name="choose_restaurant">Выбрать ресторан</string>
+    <string name="first_fragment_label">first_fragment_label</string>
+    <string name="second_fragment_label">second_fragment_label</string>
+</resources>
