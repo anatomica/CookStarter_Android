@@ -1,4 +1,4 @@
-package ru.anatomica.cookstarter;
+package ru.anatomica.cookstarter.Fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import ru.anatomica.cookstarter.MainActivity;
+import ru.anatomica.cookstarter.R;
 
 public class FirstFragment extends Fragment {
 
@@ -31,7 +33,7 @@ public class FirstFragment extends Fragment {
         view.findViewById(R.id.btn_choose).setOnClickListener(view1 -> {
             NavHostFragment.findNavController(FirstFragment.this)
                     .navigate(R.id.action_FirstFragment_to_SecondFragment);
-            mainActivity.httpClient();
+            mainActivity.getRestaurants();
         });
     }
 

@@ -1,9 +1,10 @@
 package ru.anatomica.cookstarter.Object;
 
-public class RestaurantList {
+public class RestaurantMenu {
 
     private String id;
     private String name;
+    private String prize;
 
     public String getId() {
         return id;
@@ -21,4 +22,11 @@ public class RestaurantList {
         this.name = name;
     }
 
+    public String getPrize() {
+        return prize;
+    }
+
+    public void setPrize(String prize) {
+        this.prize = prize;
+    }
 }
