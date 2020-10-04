@@ -1,66 +1,41 @@
 package ru.anatomica.cookstarter;
 
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private HttpClients httpClients;
-    private ButtonsCreate buttonsCreate;
-    public ConstraintLayout chatLayout;
-    public ConstraintLayout chatLayoutInto;
+    public HttpClients httpClients;
+    public ButtonsCreate buttonsCreate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration
+                .Builder(R.id.navigation_home, R.id.navigation_restaurants, R.id.navigation_profile)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
 
-        chatLayout = findViewById(R.id.activity_chat);
-        chatLayoutInto = findViewById(R.id.activity_chat_layout);
         buttonsCreate = new ButtonsCreate(this, httpClients);
         httpClients = new HttpClients(this, buttonsCreate);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view ->
-                buttonsCreate.createBtn(1)
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-        );
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (chatLayout.getVisibility() == View.VISIBLE) {
-            chatLayout.setVisibility(View.INVISIBLE);
-            return;
-        }
-        else {
-            shutdown();
-        }
+        // shutdown();
     }
 
     public void onClick(View view) throws InterruptedException {
@@ -80,4 +55,5 @@ public class MainActivity extends AppCompatActivity {
     public void shutdown() {
         System.exit(0);
     }
+
 }

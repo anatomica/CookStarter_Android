@@ -3,10 +3,12 @@ package ru.anatomica.cookstarter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import cz.msebera.android.httpclient.Header;
 import ru.anatomica.cookstarter.Object.RestaurantDescription;
 import ru.anatomica.cookstarter.Object.RestaurantList;
@@ -156,5 +158,4 @@ public class HttpClients {
             }
         });
     }
-
 }

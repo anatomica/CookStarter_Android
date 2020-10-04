@@ -1,11 +1,13 @@
 package ru.anatomica.cookstarter;
 
 import android.graphics.Color;
-import android.view.View;
 import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
 import java.util.ArrayList;
+
+import ru.anatomica.cookstarter.ui.restaurants.RestaurantsFragment;
 
 public class ButtonsCreate {
 
@@ -47,7 +49,6 @@ public class ButtonsCreate {
     }
 
     public void viewButton(int todo) {
-        mainActivity.chatLayout.setVisibility(View.VISIBLE);
         LinearLayout.MarginLayoutParams params = new LinearLayout.MarginLayoutParams(
                 LinearLayout.MarginLayoutParams.MATCH_PARENT,
                 LinearLayout.MarginLayoutParams.WRAP_CONTENT);
@@ -62,16 +63,15 @@ public class ButtonsCreate {
             if (todo == 3) nameButton = HttpClients.restaurantListsMenu.get(i).getName() + "\n" + HttpClients.restaurantListsMenu.get(i).getPrize();
             buttons.get(i).setText(nameButton);
             buttons.get(i).getBackground().setAlpha(100);
-            buttons.get(i).setTextColor(Color.WHITE);
+            buttons.get(i).setTextColor(Color.BLACK);
             params.height = 270;
             buttons.get(i).setLayoutParams(params);
             buttons.get(i).setY(btnMargin);
             btnMargin = btnMargin + 270;
-            mainActivity.chatLayoutInto.addView(buttons.get(i), params);
+            RestaurantsFragment.buttonsView.addView(buttons.get(i), params);
 
             int finalI = i;
             buttons.get(i).setOnClickListener(v -> {
-                String textButton;
                 if (todo == 1) {
                     httpClients.getRestaurantsDescription(HttpClients.restaurantLists.get(finalI).getName());
                 }
