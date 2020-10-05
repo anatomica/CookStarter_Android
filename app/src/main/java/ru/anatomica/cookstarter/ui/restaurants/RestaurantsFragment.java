@@ -5,26 +5,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.SearchView;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
+import ru.anatomica.cookstarter.entity.Restaurant;
+import ru.anatomica.cookstarter.entity.RestaurantDescription;
 
-public class RestaurantsFragment extends Fragment {
+public class RestaurantsFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private RestaurantsViewModel restaurantsViewModel;
     private MainActivity mainActivity;
 
-    public static ConstraintLayout buttonsView;
-    public Button findButton;
-    public Button chooseButton;
+    public static ListView restaurantsList;
+    private SearchView editText;
+    private int count = 0;
 
     @Override
     public void onAttach(Activity activity) {
@@ -35,16 +34,15 @@ public class RestaurantsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         restaurantsViewModel = ViewModelProviders.of(this).get(RestaurantsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_restaurant, container, false);
+        editText = root.findViewById(R.id.editSearch);
 
-        buttonsView = root.findViewById(R.id.buttons_layout);
-        findButton = root.findViewById(R.id.btn_find);
-        chooseButton = root.findViewById(R.id.btn_choose);
+        // запрос списка
+        mainActivity.getRequest("restaurants", "");
+        // получаем элемент ListView
+        restaurantsList = root.findViewById(R.id.restaurantsList);
 
-        restaurantsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                // textView.setText(s);
-            }
+        restaurantsViewModel.getText().observe(getViewLifecycleOwner(), s -> {
+            // textView.setText(s);
         });
         return root;
     }
@@ -52,10 +50,29 @@ public class RestaurantsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.btn_choose).setOnClickListener(view1 -> {
-            mainActivity.getRestaurants();
-            findButton.setVisibility(View.INVISIBLE);
-            chooseButton.setVisibility(View.INVISIBLE);
-        });
+        AdapterView.OnItemClickListener itemListener = (parent, v, position, id) -> {
+            // получаем выбранный пункт
+            if (parent.getCount() > 1 && count == 0) {
+                Restaurant selectedState = (Restaurant) parent.getItemAtPosition(position);
+                mainActivity.getRequest("restaurant", selectedState.getName());
+                count++;
+            }
+            if (parent.getCount() <= 1) {
+                RestaurantDescription selectedState = (RestaurantDescription) parent.getItemAtPosition(position);
+                mainActivity.getRequest("menu", selectedState.getId());
+            }
+        };
+        restaurantsList.setOnItemClickListener(itemListener);
+        editText.setOnQueryTextListener(this);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

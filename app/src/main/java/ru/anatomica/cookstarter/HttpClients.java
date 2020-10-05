@@ -3,16 +3,13 @@ package ru.anatomica.cookstarter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Random;
 import cz.msebera.android.httpclient.Header;
-import ru.anatomica.cookstarter.Object.RestaurantDescription;
-import ru.anatomica.cookstarter.Object.RestaurantList;
-import ru.anatomica.cookstarter.Object.RestaurantMenu;
+import ru.anatomica.cookstarter.entity.*;
 
 public class HttpClients {
 
@@ -22,7 +19,7 @@ public class HttpClients {
     private static Callback loadRestaurantsDescription;
     private static Callback loadRestaurantsMenu;
 
-    public static List<RestaurantList> restaurantLists = new ArrayList<>();
+    public static List<Restaurant> restaurantsList = new ArrayList<>();
     public static List<RestaurantDescription> restaurantListsDescription = new ArrayList<>();
     public static List<RestaurantMenu> restaurantListsMenu = new ArrayList<>();
 
@@ -37,9 +34,9 @@ public class HttpClients {
     }
 
     public void getRequest(String type, String name) {
-        String restaurants = "https://my-json-server.typicode.com/kunAndrew/cookstarter/restaurants";
-        String restaurant = "https://my-json-server.typicode.com/kunAndrew/cookstarter/restaurant/";
-        String menu = "https://my-json-server.typicode.com/kunAndrew/cookstarter/menu";
+        String restaurants = "https://my-json-server.typicode.com/anatomica/CookStarter_Android/restaurants";
+        String restaurant = "https://my-json-server.typicode.com/anatomica/CookStarter_Android/restaurant/";
+        String menu = "https://my-json-server.typicode.com/anatomica/CookStarter_Android/menu";
 
         String request = null;
         if (type.equals("restaurants")) request = restaurants;
@@ -62,22 +59,26 @@ public class HttpClients {
                     ObjectMapper mapper = new ObjectMapper();
                     System.out.println(json);
                     String str1 = json.replace("\n", "");
-                    String str2 = str1.replace(" ", "");
 
                     // convert JSON array to List of objects
                     if (type.equals("restaurants")) {
-                        restaurantLists = Arrays.asList(mapper.readValue(str2, RestaurantList[].class));
-                        restaurantLists.forEach(x -> System.out.println(x.getId() + ": " + x.getName()));
+                        restaurantsList = Arrays.asList(mapper.readValue(str1, Restaurant[].class));
+                        restaurantsList.forEach(x -> System.out.println(x.getId() + ": " + x.getName()));
+                        restaurantsList.forEach(x -> x.setLogo(getRandomPicture()));
+                        restaurantsList.forEach(x -> x.setAddress("ул. Ленина д.1 (вход через мавзолей)"));
                         loadRestaurants.callBack();
                     }
                     if (type.equals("restaurant")) {
-                        restaurantListsDescription = Arrays.asList(mapper.readValue(str2, RestaurantDescription.class));
+                        restaurantListsDescription = Arrays.asList(mapper.readValue(str1, RestaurantDescription.class));
                         restaurantListsDescription.forEach(x -> System.out.println(x.getId() + ": " + x.getDescription()));
+                        restaurantListsDescription.forEach(x -> x.setLogo(getRandomPicture()));
                         loadRestaurantsDescription.callBack();
                     }
                     if (type.equals("menu")) {
-                        restaurantListsMenu = Arrays.asList(mapper.readValue(str2, RestaurantMenu[].class));
+                        restaurantListsMenu = Arrays.asList(mapper.readValue(str1, RestaurantMenu[].class));
                         restaurantListsMenu.forEach(x -> System.out.println(x.getName() + ": " + x.getPrize()));
+                        restaurantListsMenu.forEach(x -> x.setLogo(getRandomPicture()));
+                        restaurantListsMenu.forEach(x -> x.setPrize(x.getPrize() + " руб."));
                         loadRestaurantsMenu.callBack();
                     }
                 } catch (IOException | InterruptedException e) {
@@ -96,5 +97,19 @@ public class HttpClients {
                 System.out.println("called when request is retried");
             }
         });
+    }
+
+    private int getRandomPicture() {
+        List<Integer> idPicture = new ArrayList<>();
+        idPicture.add(R.drawable.hardrock);
+        idPicture.add(R.drawable.mcdonalds);
+        idPicture.add(R.drawable.pablochef);
+        idPicture.add(R.drawable.rootslogo);
+        idPicture.add(R.drawable.roppolos);
+        idPicture.add(R.drawable.tacobell);
+
+        final Random rand = new Random();
+        final int rndInt = rand.nextInt(idPicture.size());
+        return idPicture.get(rndInt);
     }
 }

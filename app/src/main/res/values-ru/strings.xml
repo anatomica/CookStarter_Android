@@ -11,4 +11,5 @@
     <string name="action_settings">Настройки</string>
     <string name="find_restaurant">Найти ресторан</string>
     <string name="choose_restaurant">Выбрать ресторан</string>
+    <string name="textViewMain">Рестораны</string>
 </resources>
