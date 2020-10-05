@@ -1,0 +1,27 @@
+{
+  "restaurants": [
+    { "id": 1, "name": "PizzaHut" },
+    { "id": 2, "name": "Vkusnyesushi" },
+    { "id": 3, "name": "Mcdonalds" }
+  ],
+  "restaurant": [
+    { "id": "PizzaHut", "description": "Pizza Hut — сеть ресторанов." },
+    { "id": "Vkusnyesushi", "description": "Vkusnyesushi — сеть ресторанов."  },
+    { "id": "Mcdonalds", "description": "Mcdonalds — сеть ресторанов." }
+  ],
+  "menuPizzaHut": [
+    { "id": 1, "name": "Маргарита", "prize": 100 },
+    { "id": 2, "name": "Пепперони", "prize": 150 },
+    { "id": 3, "name": "Маргарита", "prize": 200 }
+  ],
+  "menuVkusnyesushi": [
+    { "id": 1, "name": "Филадельфия ролл", "prize": 120 },
+    { "id": 2, "name": "Калифорния ролл", "prize": 180 },
+    { "id": 3, "name": "Сливочный Ролл с Креветкой", "prize": 300 }
+  ],
+  "menuMcdonalds": [
+    { "id": 1, "name": "Чизбургер", "prize": 70 },
+    { "id": 2, "name": "Чикенбургер", "prize": 50 },
+    { "id": 3, "name": "Биг Тейсти", "prize": 160 }
+  ]
+}
