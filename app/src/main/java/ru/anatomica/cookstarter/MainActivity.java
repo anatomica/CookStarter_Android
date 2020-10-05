@@ -1,14 +1,11 @@
 package ru.anatomica.cookstarter;
 
 import android.os.Bundle;
-import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        buttonsCreate = new ButtonsCreate(this, httpClients);
+        buttonsCreate = new ButtonsCreate(this);
         httpClients = new HttpClients(this, buttonsCreate);
     }
 
@@ -38,18 +35,8 @@ public class MainActivity extends AppCompatActivity {
         // shutdown();
     }
 
-    public void onClick(View view) throws InterruptedException {
-        switch (view.getId()) {
-            case R.id.btn_find:
-                break;
-            case R.id.btn_choose:
-                // httpClient();
-                break;
-        }
-    }
-
-    public void getRestaurants() {
-        httpClients.getRequest("restaurants", "");
+    public void getRequest(String type, String name) {
+        httpClients.getRequest(type, name);
     }
 
     public void shutdown() {

@@ -4,60 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_chat"
-    tools:context=".ui.restaurants.RestaurantsFragment">
+    tools:context=".MainActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/textViewMain"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:fontFamily="@sty"
+            android:height="60dp"
+            android:gravity="center"
+            android:text="@string/textViewMain" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/buttons_layout"
+            <SearchView
+                android:id="@+id/editSearch"
                 android:layout_width="match_parent"
-                android:layout_height="3000dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content"
+                android:iconifiedByDefault="false"
+                android:padding="2dp"
+                android:queryHint="Search...." />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+            <ImageButton
+                android:id="@+id/buttonSearch"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:srcCompat="@android:drawable/ic_search_category_default" />
 
-    <Button
-        android:id="@+id/btn_find"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="120dp"
-        android:onClick="onClick"
-        android:text="@string/find_restaurant"
-        android:textSize="22sp"
-        android:textColor="@android:color/background_light"
-        android:background="@android:color/holo_green_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:color/holo_green_dark" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_choose"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="230dp"
-        android:onClick="onClick"
-        android:text="@string/choose_restaurant"
-        android:textSize="22sp"
-        android:textColor="@android:color/background_light"
-        android:background="@android:color/holo_blue_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:color/holo_blue_dark" />
+        <ListView android:id="@+id/restaurantsList"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
