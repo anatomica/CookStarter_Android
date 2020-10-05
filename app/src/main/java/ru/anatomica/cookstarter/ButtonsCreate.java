@@ -73,10 +73,10 @@ public class ButtonsCreate {
             int finalI = i;
             buttons.get(i).setOnClickListener(v -> {
                 if (todo == 1) {
-                    httpClients.getRestaurantsDescription(HttpClients.restaurantLists.get(finalI).getName());
+                    httpClients.getRequest("restaurant", HttpClients.restaurantLists.get(finalI).getName());
                 }
                 if (todo == 2) {
-                    httpClients.getRestaurantsMenu(HttpClients.restaurantListsDescription.get(0).getId());
+                    httpClients.getRequest("menu", HttpClients.restaurantListsDescription.get(0).getId());
                 }
             });
             buttons.get(i).setOnLongClickListener(v -> {

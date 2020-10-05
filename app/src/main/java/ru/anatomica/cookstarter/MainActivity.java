@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getRestaurants() {
-        httpClients.getRestaurants();
+        httpClients.getRequest("restaurants", "");
     }
 
     public void shutdown() {
