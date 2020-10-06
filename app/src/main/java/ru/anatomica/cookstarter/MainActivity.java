@@ -10,8 +10,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    public HttpClients httpClients;
-    public ButtonsCreate buttonsCreate;
+    private HttpClients httpClients;
+    private ButtonsCreate buttonsCreate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void getRequest(String type, String name) {
         httpClients.getRequest(type, name);
+    }
+
+    public void getFilter(String query) {
+        buttonsCreate.restaurantsAdapter.getFilter().filter(query);
     }
 
     public void shutdown() {
