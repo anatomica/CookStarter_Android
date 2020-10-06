@@ -2,7 +2,7 @@ package ru.anatomica.cookstarter.entity;
 
 public class RestaurantMenu {
 
-    private String id;
+    private int id;
     private String name;
     private String prize;
     private int logo;
@@ -16,18 +16,18 @@ public class RestaurantMenu {
         this.logo = logo;
     }
 
-    public RestaurantMenu(String id, String name, String prize, int logo) {
+    public RestaurantMenu(int id, String name, String prize, int logo) {
         this.id = id;
         this.name = name;
         this.prize = prize;
         this.logo = logo;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

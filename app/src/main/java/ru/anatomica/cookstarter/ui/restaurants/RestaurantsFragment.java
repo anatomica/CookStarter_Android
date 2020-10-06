@@ -23,7 +23,6 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
 
     public static ListView restaurantsList;
     private SearchView editText;
-    private int count = 0;
 
     @Override
     public void onAttach(Activity activity) {
@@ -52,12 +51,12 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
 
         AdapterView.OnItemClickListener itemListener = (parent, v, position, id) -> {
             // получаем выбранный пункт
-            if (parent.getCount() > 1 && count == 0) {
+            Object o = parent.getItemAtPosition(position);
+            if (o.getClass().getSimpleName().equals("Restaurant")) {
                 Restaurant selectedState = (Restaurant) parent.getItemAtPosition(position);
                 mainActivity.getRequest("restaurant", selectedState.getName());
-                count++;
             }
-            if (parent.getCount() <= 1) {
+            if (o.getClass().getSimpleName().equals("RestaurantDescription")) {
                 RestaurantDescription selectedState = (RestaurantDescription) parent.getItemAtPosition(position);
                 mainActivity.getRequest("menu", selectedState.getId());
             }
@@ -68,6 +67,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        mainActivity.getFilter(query);
         return false;
     }
 

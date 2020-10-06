@@ -14,6 +14,7 @@ import ru.anatomica.cookstarter.entity.*;
 public class HttpClients {
 
     private MainActivity mainActivity;
+    private List<Integer> idPicture;
 
     private static Callback loadRestaurants;
     private static Callback loadRestaurantsDescription;
@@ -64,21 +65,26 @@ public class HttpClients {
                     if (type.equals("restaurants")) {
                         restaurantsList = Arrays.asList(mapper.readValue(str1, Restaurant[].class));
                         restaurantsList.forEach(x -> System.out.println(x.getId() + ": " + x.getName()));
-                        restaurantsList.forEach(x -> x.setLogo(getRandomPicture()));
-                        restaurantsList.forEach(x -> x.setAddress("ул. Ленина д.1 (вход через мавзолей)"));
+                        restaurantsList.forEach(x -> x.setAddress("ул. Ленина д.1"));
+                        getRandomPicture();
+                        for (int i = 0; i < restaurantsList.size(); i++) restaurantsList.get(i).setLogo(idPicture.get(i));
                         loadRestaurants.callBack();
                     }
                     if (type.equals("restaurant")) {
                         restaurantListsDescription = Arrays.asList(mapper.readValue(str1, RestaurantDescription.class));
                         restaurantListsDescription.forEach(x -> System.out.println(x.getId() + ": " + x.getDescription()));
-                        restaurantListsDescription.forEach(x -> x.setLogo(getRandomPicture()));
+                        restaurantsList.forEach(x -> {
+                            if (x.getName().equals(restaurantListsDescription.get(0).getId())) {
+                                restaurantListsDescription.get(0).setLogo(x.getLogo());
+                            }
+                        });
                         loadRestaurantsDescription.callBack();
                     }
                     if (type.equals("menu")) {
                         restaurantListsMenu = Arrays.asList(mapper.readValue(str1, RestaurantMenu[].class));
                         restaurantListsMenu.forEach(x -> System.out.println(x.getName() + ": " + x.getPrize()));
-                        restaurantListsMenu.forEach(x -> x.setLogo(getRandomPicture()));
                         restaurantListsMenu.forEach(x -> x.setPrize(x.getPrize() + " руб."));
+                        restaurantListsMenu.forEach(x -> x.setLogo(restaurantListsDescription.get(0).getLogo()));
                         loadRestaurantsMenu.callBack();
                     }
                 } catch (IOException | InterruptedException e) {
@@ -99,17 +105,16 @@ public class HttpClients {
         });
     }
 
-    private int getRandomPicture() {
-        List<Integer> idPicture = new ArrayList<>();
-        idPicture.add(R.drawable.hardrock);
-        idPicture.add(R.drawable.mcdonalds);
-        idPicture.add(R.drawable.pablochef);
-        idPicture.add(R.drawable.rootslogo);
+    private void getRandomPicture() {
+        idPicture = new ArrayList<>();
         idPicture.add(R.drawable.roppolos);
+        idPicture.add(R.drawable.pablochef);
+        idPicture.add(R.drawable.mcdonalds);
+        idPicture.add(R.drawable.hardrock);
+        idPicture.add(R.drawable.rootslogo);
         idPicture.add(R.drawable.tacobell);
 
         final Random rand = new Random();
         final int rndInt = rand.nextInt(idPicture.size());
-        return idPicture.get(rndInt);
     }
 }
