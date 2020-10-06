@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
 
     public static ListView restaurantsList;
     private SearchView editText;
+    private LinearLayout searchBar;
 
     @Override
     public void onAttach(Activity activity) {
@@ -34,6 +36,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
         restaurantsViewModel = ViewModelProviders.of(this).get(RestaurantsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_restaurant, container, false);
         editText = root.findViewById(R.id.editSearch);
+        searchBar = root.findViewById(R.id.search_bar);
 
         // запрос списка
         mainActivity.getRequest("restaurants", "");
@@ -55,6 +58,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
             if (o.getClass().getSimpleName().equals("Restaurant")) {
                 Restaurant selectedState = (Restaurant) parent.getItemAtPosition(position);
                 mainActivity.getRequest("restaurant", selectedState.getName());
+                searchBar.setVisibility(View.INVISIBLE);
             }
             if (o.getClass().getSimpleName().equals("RestaurantDescription")) {
                 RestaurantDescription selectedState = (RestaurantDescription) parent.getItemAtPosition(position);
