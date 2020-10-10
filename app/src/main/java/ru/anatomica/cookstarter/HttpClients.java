@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 import cz.msebera.android.httpclient.Header;
 import ru.anatomica.cookstarter.entity.*;
+import ru.anatomica.cookstarter.ui.login.LoginActivity;
 
 public class HttpClients {
 
@@ -45,6 +46,7 @@ public class HttpClients {
         if (type.equals("menu")) request = menu + name;
 
         AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", "Bearer " + LoginActivity.token);
         client.get(request, new AsyncHttpResponseHandler() {
 
             @Override

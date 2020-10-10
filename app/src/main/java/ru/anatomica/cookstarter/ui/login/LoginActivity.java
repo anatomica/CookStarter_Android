@@ -14,12 +14,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
+import ru.anatomica.cookstarter.entity.Token;
 
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
+    public List<Token> tokenList = new ArrayList<>();
+    public static String token;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
             loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(usernameEditText.getText().toString(),
                     passwordEditText.getText().toString());
+            getToken();
         });
     }
 
@@ -109,4 +125,58 @@ public class LoginActivity extends AppCompatActivity {
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
+
+    public void getToken() {
+        String auth = "https://marketcook.herokuapp.com/market/auth";
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("username", "admin@gmail.com");
+            json.put("password", "100");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        StringEntity entity = new StringEntity(json.toString(), "UTF-8");
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.post(getApplicationContext(), auth, entity, "application/json", new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                System.out.println("called before request is started");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                // called when response HTTP status is "200 OK"
+                try {
+                    String json = new String(response, "UTF-8");
+                    ObjectMapper mapper = new ObjectMapper();
+                    System.out.println(json);
+
+                    tokenList = Arrays.asList(mapper.readValue(json, Token.class));
+                    token = tokenList.get(0).getToken();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                try {
+                    System.out.println(new String(errorResponse, "UTF-8") + " " + statusCode);
+                } catch (UnsupportedEncodingException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                System.out.println("called when request is retried");
+            }
+        });
+    }
+
 }
