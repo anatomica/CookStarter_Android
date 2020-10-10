@@ -35,6 +35,7 @@ public class HttpClients {
         loadRestaurantsMenu = () -> buttonsCreate.createBtn(3);
     }
 
+    
     public void getRequest(String type, String name) {
         String restaurants = "https://my-json-server.typicode.com/anatomica/CookStarter_Android/restaurants";
         String restaurant = "https://my-json-server.typicode.com/anatomica/CookStarter_Android/restaurant/";
