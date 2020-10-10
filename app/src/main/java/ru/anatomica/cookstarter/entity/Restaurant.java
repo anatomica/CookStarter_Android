@@ -2,9 +2,11 @@ package ru.anatomica.cookstarter.entity;
 
 public class Restaurant {
 
-    private int id;
+    private Long id;
     private String name;
+    private String description;
     private String address;
+    private String telephone;
     private int logo;
 
     public Restaurant() {
@@ -16,18 +18,28 @@ public class Restaurant {
         this.logo = logo;
     }
 
-    public Restaurant(int id, String name, String address, int logo) {
-        this.id = id;
+    public Restaurant(String name, String description, String address, String telephone, int logo) {
         this.name = name;
+        this.description = description;
         this.address = address;
+        this.telephone = telephone;
         this.logo = logo;
     }
 
-    public int getId() {
+    public Restaurant(Long id, String name, String description, String address, String telephone, int logo) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.address = address;
+        this.telephone = telephone;
+        this.logo = logo;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -39,12 +51,28 @@ public class Restaurant {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public int getLogo() {
@@ -54,5 +82,4 @@ public class Restaurant {
     public void setLogo(int logo) {
         this.logo = logo;
     }
-
 }

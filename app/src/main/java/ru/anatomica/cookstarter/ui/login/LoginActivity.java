@@ -112,7 +112,8 @@ public class LoginActivity extends AppCompatActivity {
             loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(usernameEditText.getText().toString(),
                     passwordEditText.getText().toString());
-            getToken();
+            getToken(usernameEditText.getText().toString(),
+                    passwordEditText.getText().toString());
         });
     }
 
@@ -126,13 +127,13 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    public void getToken() {
+    public void getToken(String username, String password) {
         String auth = "https://marketcook.herokuapp.com/market/auth";
 
         JSONObject json = new JSONObject();
         try {
-            json.put("username", "admin@gmail.com");
-            json.put("password", "100");
+            json.put("username", username);
+            json.put("password", password);
         } catch (JSONException e) {
             e.printStackTrace();
         }

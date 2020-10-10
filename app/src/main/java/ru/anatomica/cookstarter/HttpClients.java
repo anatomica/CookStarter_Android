@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,16 +36,15 @@ public class HttpClients {
         loadRestaurantsMenu = () -> buttonsCreate.createBtn(3);
     }
 
-    
-    public void getRequest(String type, String name) {
-        String restaurants = "https://my-json-server.typicode.com/anatomica/CookStarter_Android/restaurants";
-        String restaurant = "https://my-json-server.typicode.com/anatomica/CookStarter_Android/restaurant/";
+    public void getRequest(String type, Long id) {
+        String restaurants = "https://marketcook.herokuapp.com/market/api/v1/restaurants";
+        String restaurant = "https://marketcook.herokuapp.com/market/api/v1/restaurants/";
         String menu = "https://my-json-server.typicode.com/anatomica/CookStarter_Android/menu";
 
         String request = null;
         if (type.equals("restaurants")) request = restaurants;
-        if (type.equals("restaurant")) request = restaurant + name;
-        if (type.equals("menu")) request = menu + name;
+        if (type.equals("restaurant")) request = restaurant + id;
+        if (type.equals("menu")) request = menu + id;
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.addHeader("Authorization", "Bearer " + LoginActivity.token);
@@ -68,7 +68,6 @@ public class HttpClients {
                     if (type.equals("restaurants")) {
                         restaurantsList = Arrays.asList(mapper.readValue(str1, Restaurant[].class));
                         restaurantsList.forEach(x -> System.out.println(x.getId() + ": " + x.getName()));
-                        restaurantsList.forEach(x -> x.setAddress("ул. Ленина д.1"));
                         getRandomPicture();
                         for (int i = 0; i < restaurantsList.size(); i++) restaurantsList.get(i).setLogo(idPicture.get(i));
                         loadRestaurants.callBack();
@@ -98,7 +97,11 @@ public class HttpClients {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                System.out.println(Arrays.toString(errorResponse) + " " + statusCode);
+                try {
+                    System.out.println(new String(errorResponse, "UTF-8") + " " + statusCode);
+                } catch (UnsupportedEncodingException ex) {
+                    ex.printStackTrace();
+                }
             }
 
             @Override
@@ -110,11 +113,11 @@ public class HttpClients {
 
     private void getRandomPicture() {
         idPicture = new ArrayList<>();
-        idPicture.add(R.drawable.roppolos);
-        idPicture.add(R.drawable.pablochef);
-        idPicture.add(R.drawable.mcdonalds);
         idPicture.add(R.drawable.hardrock);
+        idPicture.add(R.drawable.mcdonalds);
+        idPicture.add(R.drawable.pablochef);
         idPicture.add(R.drawable.rootslogo);
+        idPicture.add(R.drawable.roppolos);
         idPicture.add(R.drawable.tacobell);
 
         final Random rand = new Random();

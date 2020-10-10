@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         // shutdown();
     }
 
-    public void getRequest(String type, String name) {
-        httpClients.getRequest(type, name);
+    public void getRequest(String type, Long id) {
+        httpClients.getRequest(type, id);
     }
 
     public void getFilter(String query) {
