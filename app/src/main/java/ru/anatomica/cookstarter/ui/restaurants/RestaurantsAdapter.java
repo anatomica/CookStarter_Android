@@ -58,7 +58,7 @@ public class RestaurantsAdapter extends ArrayAdapter<Restaurant> implements Filt
 
         Restaurant restaurant = restaurants.get(position);
 
-        logoView.setImageResource(restaurant.getLogo());
+        logoView.setImageResource(restaurant.getLogoId());
         nameView.setText(restaurant.getName());
         addressView.setText(restaurant.getAddress());
 
@@ -87,9 +87,10 @@ public class RestaurantsAdapter extends ArrayAdapter<Restaurant> implements Filt
                             .contains(constraint.toString().toUpperCase())) {
 
                         Restaurant restaurant = new Restaurant(
+                                mStringFilterList.get(i).getId(),
                                 mStringFilterList.get(i).getName(),
                                 mStringFilterList.get(i).getAddress(),
-                                mStringFilterList.get(i).getLogo());
+                                mStringFilterList.get(i).getLogoId());
                         filterList.add(restaurant);
                     }
                 }

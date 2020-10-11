@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
 import ru.anatomica.cookstarter.entity.Restaurant;
-import ru.anatomica.cookstarter.entity.RestaurantDescription;
+import ru.anatomica.cookstarter.entity.RestaurantMenu;
 
 public class RestaurantsFragment extends Fragment implements SearchView.OnQueryTextListener {
 
@@ -39,7 +39,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
         searchBar = root.findViewById(R.id.search_bar);
 
         // запрос списка
-        mainActivity.getRequest("restaurants", "");
+        mainActivity.getRequest("restaurants", 1L);
         // получаем элемент ListView
         restaurantsList = root.findViewById(R.id.restaurantsList);
 
@@ -56,13 +56,13 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
             // получаем выбранный пункт
             Object o = parent.getItemAtPosition(position);
             if (o.getClass().getSimpleName().equals("Restaurant")) {
-                Restaurant selectedState = (Restaurant) parent.getItemAtPosition(position);
-                mainActivity.getRequest("restaurant", selectedState.getName());
+                Restaurant selectedRestaurant = (Restaurant) parent.getItemAtPosition(position);
+                mainActivity.getRequest("restaurantMenu", selectedRestaurant.getId());
                 searchBar.setVisibility(View.INVISIBLE);
             }
-            if (o.getClass().getSimpleName().equals("RestaurantDescription")) {
-                RestaurantDescription selectedState = (RestaurantDescription) parent.getItemAtPosition(position);
-                mainActivity.getRequest("menu", selectedState.getId());
+            if (o.getClass().getSimpleName().equals("RestaurantMenu")) {
+                RestaurantMenu selectedMenuItem = (RestaurantMenu) parent.getItemAtPosition(position);
+                // mainActivity.getRequest("menuItem", selectedMenuItem.getId());
             }
         };
         restaurantsList.setOnItemClickListener(itemListener);
