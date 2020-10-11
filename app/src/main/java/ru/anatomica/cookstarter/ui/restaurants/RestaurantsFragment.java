@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
 import ru.anatomica.cookstarter.entity.Restaurant;
-import ru.anatomica.cookstarter.entity.RestaurantDescription;
+import ru.anatomica.cookstarter.entity.RestaurantMenu;
 
 public class RestaurantsFragment extends Fragment implements SearchView.OnQueryTextListener {
 
@@ -57,12 +57,12 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
             Object o = parent.getItemAtPosition(position);
             if (o.getClass().getSimpleName().equals("Restaurant")) {
                 Restaurant selectedRestaurant = (Restaurant) parent.getItemAtPosition(position);
-                mainActivity.getRequest("restaurant", selectedRestaurant.getId());
+                mainActivity.getRequest("restaurantMenu", selectedRestaurant.getId());
                 searchBar.setVisibility(View.INVISIBLE);
             }
-            if (o.getClass().getSimpleName().equals("RestaurantDescription")) {
-                RestaurantDescription selectedRestaurant = (RestaurantDescription) parent.getItemAtPosition(position);
-                mainActivity.getRequest("menu", 1L);
+            if (o.getClass().getSimpleName().equals("RestaurantMenu")) {
+                RestaurantMenu selectedMenuItem = (RestaurantMenu) parent.getItemAtPosition(position);
+                // mainActivity.getRequest("menuItem", selectedMenuItem.getId());
             }
         };
         restaurantsList.setOnItemClickListener(itemListener);

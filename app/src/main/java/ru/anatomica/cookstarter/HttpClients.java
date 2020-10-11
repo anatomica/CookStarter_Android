@@ -19,11 +19,9 @@ public class HttpClients {
     private List<Integer> idPicture;
 
     private static Callback loadRestaurants;
-    private static Callback loadRestaurantsDescription;
     private static Callback loadRestaurantsMenu;
 
     public static List<Restaurant> restaurantsList = new ArrayList<>();
-    public static List<RestaurantDescription> restaurantListsDescription = new ArrayList<>();
     public static List<RestaurantMenu> restaurantListsMenu = new ArrayList<>();
 
     public HttpClients() {
@@ -32,19 +30,16 @@ public class HttpClients {
     public HttpClients(MainActivity mainActivity, ButtonsCreate buttonsCreate) {
         this.mainActivity = mainActivity;
         loadRestaurants = () -> buttonsCreate.createBtn(1);
-        loadRestaurantsDescription = () -> buttonsCreate.createBtn(2);
-        loadRestaurantsMenu = () -> buttonsCreate.createBtn(3);
+        loadRestaurantsMenu = () -> buttonsCreate.createBtn(2);
     }
 
     public void getRequest(String type, Long id) {
         String restaurants = "https://marketcook.herokuapp.com/market/api/v1/restaurants";
-        String restaurant = "https://marketcook.herokuapp.com/market/api/v1/restaurants/";
-        String menu = "https://my-json-server.typicode.com/anatomica/CookStarter_Android/menu";
+        String restaurantMenu = "https://marketcook.herokuapp.com/market/api/v1/restaurants/";
 
         String request = null;
         if (type.equals("restaurants")) request = restaurants;
-        if (type.equals("restaurant")) request = restaurant + id;
-        if (type.equals("menu")) request = menu + id;
+        if (type.equals("restaurantMenu")) request = restaurantMenu + id;
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.addHeader("Authorization", "Bearer " + LoginActivity.token);
@@ -62,31 +57,20 @@ public class HttpClients {
                     String json = new String(response, "UTF-8");
                     ObjectMapper mapper = new ObjectMapper();
                     System.out.println(json);
-                    String str1 = json.replace("\n", "");
+                    String str = json.replace("\n", "");
 
                     // convert JSON array to List of objects
                     if (type.equals("restaurants")) {
-                        restaurantsList = Arrays.asList(mapper.readValue(str1, Restaurant[].class));
+                        restaurantsList = Arrays.asList(mapper.readValue(str, Restaurant[].class));
                         restaurantsList.forEach(x -> System.out.println(x.getId() + ": " + x.getName()));
                         getRandomPicture();
-                        for (int i = 0; i < restaurantsList.size(); i++) restaurantsList.get(i).setLogo(idPicture.get(i));
+                        for (int i = 0; i < restaurantsList.size(); i++) restaurantsList.get(i).setLogoId(idPicture.get(i));
                         loadRestaurants.callBack();
                     }
-                    if (type.equals("restaurant")) {
-                        restaurantListsDescription = Arrays.asList(mapper.readValue(str1, RestaurantDescription.class));
-                        restaurantListsDescription.forEach(x -> System.out.println(x.getId() + ": " + x.getDescription()));
-                        restaurantsList.forEach(x -> {
-                            if (x.getName().equals(restaurantListsDescription.get(0).getId())) {
-                                restaurantListsDescription.get(0).setLogo(x.getLogo());
-                            }
-                        });
-                        loadRestaurantsDescription.callBack();
-                    }
-                    if (type.equals("menu")) {
-                        restaurantListsMenu = Arrays.asList(mapper.readValue(str1, RestaurantMenu[].class));
-                        restaurantListsMenu.forEach(x -> System.out.println(x.getName() + ": " + x.getPrize()));
-                        restaurantListsMenu.forEach(x -> x.setPrize(x.getPrize() + " руб."));
-                        restaurantListsMenu.forEach(x -> x.setLogo(restaurantListsDescription.get(0).getLogo()));
+                    if (type.equals("restaurantMenu")) {
+                        restaurantListsMenu = Arrays.asList(mapper.readValue(str, RestaurantMenu[].class));
+                        restaurantListsMenu.forEach(x -> System.out.println(x.getTitle() + ": " + x.getPrice()));
+                        restaurantListsMenu.forEach(x -> x.setLogoId(idPicture.get(x.getLogoId() - 1)));
                         loadRestaurantsMenu.callBack();
                     }
                 } catch (IOException | InterruptedException e) {

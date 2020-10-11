@@ -21,19 +21,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
+import ru.anatomica.cookstarter.data.LoginDataSource;
 import ru.anatomica.cookstarter.entity.Token;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private EditText usernameEditText;
+    private EditText passwordEditText;
     private LoginViewModel loginViewModel;
-    public List<Token> tokenList = new ArrayList<>();
+
+    public static List<Token> tokenList;
     public static String token;
 
     @Override
@@ -43,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText usernameEditText = findViewById(R.id.username);
-        final EditText passwordEditText = findViewById(R.id.password);
+        usernameEditText = findViewById(R.id.username);
+        passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
@@ -71,14 +74,13 @@ public class LoginActivity extends AppCompatActivity {
             }
             if (loginResult.getSuccess() != null) {
                 updateUiWithUser(loginResult.getSuccess());
+
+                // Complete, destroy login activity once successful and load main activity
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
             setResult(Activity.RESULT_OK);
-
-            // Complete, destroy login activity once successful and load main activity
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-
         });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
@@ -102,18 +104,14 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                getToken(usernameEditText.getText().toString(), passwordEditText.getText().toString());
             }
             return false;
         });
 
         loginButton.setOnClickListener(v -> {
             loadingProgressBar.setVisibility(View.VISIBLE);
-            loginViewModel.login(usernameEditText.getText().toString(),
-                    passwordEditText.getText().toString());
-            getToken(usernameEditText.getText().toString(),
-                    passwordEditText.getText().toString());
+            getToken(usernameEditText.getText().toString(), passwordEditText.getText().toString());
         });
     }
 
@@ -158,6 +156,9 @@ public class LoginActivity extends AppCompatActivity {
                     tokenList = Arrays.asList(mapper.readValue(json, Token.class));
                     token = tokenList.get(0).getToken();
 
+                    LoginDataSource.success = 1;
+                    loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -168,6 +169,7 @@ public class LoginActivity extends AppCompatActivity {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 try {
                     System.out.println(new String(errorResponse, "UTF-8") + " " + statusCode);
+                    loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
                 } catch (UnsupportedEncodingException ex) {
                     ex.printStackTrace();
                 }
