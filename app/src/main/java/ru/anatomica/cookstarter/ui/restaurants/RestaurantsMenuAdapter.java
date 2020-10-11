@@ -1,5 +1,6 @@
 package ru.anatomica.cookstarter.ui.restaurants;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,7 @@ public class RestaurantsMenuAdapter extends ArrayAdapter<RestaurantMenu> impleme
         return position;
     }
 
+    @SuppressLint("SetTextI18n")
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         View view = inflater.inflate(this.layout, parent, false);
@@ -62,9 +64,9 @@ public class RestaurantsMenuAdapter extends ArrayAdapter<RestaurantMenu> impleme
 
         RestaurantMenu restaurant = restaurants.get(position);
 
-        logoView.setImageResource(restaurant.getLogo());
-        nameView.setText(restaurant.getName());
-        addressView.setText(restaurant.getPrize());
+        logoView.setImageResource(restaurant.getLogoId());
+        nameView.setText(restaurant.getTitle());
+        addressView.setText(restaurant.getPrice().toString() + " руб.");
 
         return view;
     }
@@ -87,13 +89,14 @@ public class RestaurantsMenuAdapter extends ArrayAdapter<RestaurantMenu> impleme
             if (constraint != null && constraint.length() > 0) {
                 ArrayList<RestaurantMenu> filterList = new ArrayList<>();
                 for (int i = 0; i < mStringFilterList.size(); i++) {
-                    if ((mStringFilterList.get(i).getName().toUpperCase())
+                    if ((mStringFilterList.get(i).getTitle().toUpperCase())
                             .contains(constraint.toString().toUpperCase())) {
 
                         RestaurantMenu restaurant = new RestaurantMenu(
-                                mStringFilterList.get(i).getName(),
-                                mStringFilterList.get(i).getPrize(),
-                                mStringFilterList.get(i).getLogo());
+                                mStringFilterList.get(i).getId(),
+                                mStringFilterList.get(i).getTitle(),
+                                mStringFilterList.get(i).getPrice(),
+                                mStringFilterList.get(i).getLogoId());
                         filterList.add(restaurant);
                     }
                 }

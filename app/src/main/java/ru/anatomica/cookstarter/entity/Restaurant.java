@@ -2,32 +2,37 @@ package ru.anatomica.cookstarter.entity;
 
 public class Restaurant {
 
-    private int id;
+    private Long id;
     private String name;
+    private String description;
     private String address;
-    private int logo;
+    private String telephone;
+    private int logoId;
 
     public Restaurant() {
     }
 
-    public Restaurant(String name, String address, int logo) {
-        this.name = name;
-        this.address = address;
-        this.logo = logo;
-    }
-
-    public Restaurant(int id, String name, String address, int logo) {
+    public Restaurant(Long id, String name, String address, int logoId) {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.logo = logo;
+        this.logoId = logoId;
     }
 
-    public int getId() {
+    public Restaurant(Long id, String name, String description, String address, String telephone, int logoId) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.address = address;
+        this.telephone = telephone;
+        this.logoId = logoId;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -39,6 +44,14 @@ public class Restaurant {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -47,12 +60,19 @@ public class Restaurant {
         this.address = address;
     }
 
-    public int getLogo() {
-        return logo;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setLogo(int logo) {
-        this.logo = logo;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
+    public int getLogoId() {
+        return logoId;
+    }
+
+    public void setLogoId(int logoId) {
+        this.logoId = logoId;
+    }
 }
