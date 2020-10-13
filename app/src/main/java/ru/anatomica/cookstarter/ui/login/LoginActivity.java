@@ -113,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
             loadingProgressBar.setVisibility(View.VISIBLE);
             getToken(usernameEditText.getText().toString(), passwordEditText.getText().toString());
         });
+        getToken("100", "100");
     }
 
     private void updateUiWithUser(LoggedInUserView model) {

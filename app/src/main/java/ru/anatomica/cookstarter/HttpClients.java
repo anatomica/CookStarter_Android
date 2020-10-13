@@ -35,7 +35,7 @@ public class HttpClients {
 
     public void getRequest(String type, Long id) {
         String restaurants = "https://marketcook.herokuapp.com/market/api/v1/restaurants";
-        String restaurantMenu = "https://marketcook.herokuapp.com/market/api/v1/restaurants/";
+        String restaurantMenu = "https://marketcook.herokuapp.com/market/api/v1/products/";
 
         String request = null;
         if (type.equals("restaurants")) request = restaurants;
