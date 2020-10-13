@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -19,12 +21,19 @@ import ru.anatomica.cookstarter.entity.RestaurantMenu;
 
 public class RestaurantsFragment extends Fragment implements SearchView.OnQueryTextListener {
 
+    public static ListView restaurantsList;
+
     private RestaurantsViewModel restaurantsViewModel;
     private MainActivity mainActivity;
 
-    public static ListView restaurantsList;
+    private ViewGroup placeholder;
+    private LayoutInflater mInflater;
+    private ViewGroup mContainer;
+
     private SearchView editText;
     private LinearLayout searchBar;
+    private ImageView imageView;
+    private Button addToCart;
 
     @Override
     public void onAttach(Activity activity) {
@@ -34,19 +43,24 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         restaurantsViewModel = ViewModelProviders.of(this).get(RestaurantsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_restaurant, container, false);
-        editText = root.findViewById(R.id.editSearch);
-        searchBar = root.findViewById(R.id.search_bar);
+        mInflater = inflater;
+        mContainer = container;
+
+        View view = inflater.inflate(R.layout.fragment_restaurant, container,false);
+        placeholder = (ViewGroup) view;
+
+        editText = view.findViewById(R.id.editSearch);
+        searchBar = view.findViewById(R.id.search_bar);
 
         // запрос списка
         mainActivity.getRequest("restaurants", 1L);
         // получаем элемент ListView
-        restaurantsList = root.findViewById(R.id.restaurantsList);
+        restaurantsList = view.findViewById(R.id.restaurantsList);
 
         restaurantsViewModel.getText().observe(getViewLifecycleOwner(), s -> {
             // textView.setText(s);
         });
-        return root;
+        return placeholder;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -62,9 +76,20 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
             }
             if (o.getClass().getSimpleName().equals("RestaurantMenu")) {
                 RestaurantMenu selectedMenuItem = (RestaurantMenu) parent.getItemAtPosition(position);
-                // mainActivity.getRequest("menuItem", selectedMenuItem.getId());
+
+                View newView = mInflater.inflate(R.layout.restaurant_item, mContainer, false);
+                placeholder.removeAllViews();
+                placeholder.addView(newView);
+
+                imageView = newView.findViewById(R.id.main_logo);
+                addToCart = newView.findViewById(R.id.addToCart);
+                imageView.setImageResource(selectedMenuItem.getLogoId());
+                addToCart.setOnClickListener(vi -> {
+                    // TODO: Send request to cart
+                });
             }
         };
+
         restaurantsList.setOnItemClickListener(itemListener);
         editText.setOnQueryTextListener(this);
     }
@@ -79,4 +104,5 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
     public boolean onQueryTextChange(String newText) {
         return false;
     }
+
 }

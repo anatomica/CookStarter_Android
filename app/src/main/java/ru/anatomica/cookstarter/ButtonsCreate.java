@@ -15,14 +15,10 @@ public class ButtonsCreate {
 
     public void createBtn(int todo) {
         // создаем адаптер
-        if (todo == 1)
-            restaurantsAdapter = new RestaurantsAdapter(mainActivity, R.layout.restaurant_items, HttpClients.restaurantsList);
-        if (todo == 2)
-            restaurantsMenuAdapter = new RestaurantsMenuAdapter(mainActivity, R.layout.restaurant_items, HttpClients.restaurantListsMenu);
-        if (todo == 3) return;
+        if (todo == 1) restaurantsAdapter = new RestaurantsAdapter(mainActivity, R.layout.restaurant_items, HttpClients.restaurantsList);
+        if (todo == 2) restaurantsMenuAdapter = new RestaurantsMenuAdapter(mainActivity, R.layout.restaurant_items, HttpClients.restaurantListsMenu);
         // устанавливаем адаптер
         if (todo == 1) RestaurantsFragment.restaurantsList.setAdapter(restaurantsAdapter);
         if (todo == 2) RestaurantsFragment.restaurantsList.setAdapter(restaurantsMenuAdapter);
-        if (todo == 3) return;
     }
 }
