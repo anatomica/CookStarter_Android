@@ -62,7 +62,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
             }
             if (o.getClass().getSimpleName().equals("RestaurantMenu")) {
                 RestaurantMenu selectedMenuItem = (RestaurantMenu) parent.getItemAtPosition(position);
-                // mainActivity.getRequest("menuItem", selectedMenuItem.getId());
+                mainActivity.buttonsCreate(3);
             }
         };
         restaurantsList.setOnItemClickListener(itemListener);
