@@ -43,10 +43,6 @@ public class MainActivity extends AppCompatActivity {
         buttonsCreate.restaurantsAdapter.getFilter().filter(query);
     }
 
-    public void buttonsCreate(int type) {
-        buttonsCreate.createBtn(type);
-    }
-
     public void shutdown() {
         System.exit(0);
     }
