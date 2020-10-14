@@ -1,6 +1,7 @@
 package ru.anatomica.cookstarter;
 
 import android.os.Bundle;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -43,8 +44,11 @@ public class MainActivity extends AppCompatActivity {
         buttonsCreate.restaurantsAdapter.getFilter().filter(query);
     }
 
+    public void serviceMessage(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    }
+
     public void shutdown() {
         System.exit(0);
     }
-
 }

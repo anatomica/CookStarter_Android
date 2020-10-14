@@ -127,7 +127,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void getToken(String username, String password) {
-        String auth = "https://marketcook.herokuapp.com/market/auth";
+        String auth = "http://89.19.179.2:8189/market/auth";
+        // String auth = "https://marketcook.herokuapp.com/market/auth";
 
         JSONObject json = new JSONObject();
         try {
