@@ -40,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         httpClients.getRequest(type, id);
     }
 
+    public void postRequest(String address, String phone)  {
+        httpClients.postRequest(address, phone);
+    }
+
     public void getFilter(String query) {
         buttonsCreate.restaurantsAdapter.getFilter().filter(query);
     }

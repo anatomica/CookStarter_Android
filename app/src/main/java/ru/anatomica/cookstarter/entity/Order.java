@@ -5,20 +5,18 @@ import java.math.BigDecimal;
 public class Order {
 
     private Long id;
-    private RestaurantMenu restaurantMenu;
+    private String productTitle;
     private BigDecimal price;
     private int quantity;
-    private Order order;
 
     public Order() {
     }
 
-    public Order(Long id, RestaurantMenu restaurantMenu, BigDecimal price, int quantity, Order order) {
+    public Order(Long id, String productTitle, BigDecimal price, int quantity) {
         this.id = id;
-        this.restaurantMenu = restaurantMenu;
+        this.productTitle = productTitle;
         this.price = price;
         this.quantity = quantity;
-        this.order = order;
     }
 
     public Long getId() {
@@ -29,12 +27,12 @@ public class Order {
         this.id = id;
     }
 
-    public RestaurantMenu getRestaurantMenu() {
-        return restaurantMenu;
+    public String getProductTitle() {
+        return productTitle;
     }
 
-    public void setRestaurantMenu(RestaurantMenu restaurantMenu) {
-        this.restaurantMenu = restaurantMenu;
+    public void setProductTitle(String productTitle) {
+        this.productTitle = productTitle;
     }
 
     public BigDecimal getPrice() {
@@ -51,13 +49,5 @@ public class Order {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 }
