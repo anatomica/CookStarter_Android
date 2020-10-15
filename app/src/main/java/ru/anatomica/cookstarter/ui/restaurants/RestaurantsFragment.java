@@ -2,6 +2,7 @@ package ru.anatomica.cookstarter.ui.restaurants;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -34,6 +37,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
     private LinearLayout searchBar;
     private ImageView imageView;
     private Button addToCart;
+    private TextView quantity;
 
     @Override
     public void onAttach(Activity activity) {
@@ -83,9 +87,14 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
 
                 imageView = newView.findViewById(R.id.main_logo);
                 addToCart = newView.findViewById(R.id.addToCart);
+                quantity = newView.findViewById(R.id.quantity);
+
                 imageView.setImageResource(selectedMenuItem.getLogoId());
+                quantity.setTextSize(40);
+                quantity.setText("1");
+                quantity.setGravity(Gravity.CENTER | Gravity.BOTTOM);
                 addToCart.setOnClickListener(vi -> {
-                    // TODO: Send request to cart
+                    mainActivity.getRequest("addToCart", selectedMenuItem.getId());
                 });
             }
         };
