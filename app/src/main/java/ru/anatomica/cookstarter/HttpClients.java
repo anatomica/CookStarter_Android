@@ -17,21 +17,13 @@ import ru.anatomica.cookstarter.ui.profile.ProfileFragment;
 
 public class HttpClients {
 
-    public final String restaurants = "http://89.19.179.2:8189/market/api/v1/restaurants";
-    public final String restaurantMenu = "http://89.19.179.2:8189/market/api/v1/products/";
-    public final String addToCart = "http://89.19.179.2:8189/market/api/v1/cart/add/";
-    public final String requestCart = "http://89.19.179.2:8189/market/api/v1/cart";
-    public final String getOrder = "http://89.19.179.2:8189/market/api/v1/orders";
-    public final String createOrder = "http://89.19.179.2:8189/market/api/v1/orders/confirm";
-    public final String getUser = "http://89.19.179.2:8189/market/profile/user";
-
-//    public final String restaurants = "https://marketcook.herokuapp.com/market/api/v1/restaurants";
-//    public final String restaurantMenu = "https://marketcook.herokuapp.com/market/api/v1/products/";
-//    public final String addToCart = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
-//    public final String requestCart = "https://marketcook.herokuapp.com/market/api/v1/cart";
-//    public final String getOrder = "https://marketcook.herokuapp.com/market/api/v1/orders";
-//    public final String createOrder = "https://marketcook.herokuapp.com/market/api/v1/orders/confirm";
-//    public final String getUser = "https://marketcook.herokuapp.com/market/profile/user";
+    public final String restaurants = "https://marketcook.herokuapp.com/market/api/v1/restaurants";
+    public final String restaurantMenu = "https://marketcook.herokuapp.com/market/api/v1/products/";
+    public final String addToCart = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
+    public final String requestCart = "https://marketcook.herokuapp.com/market/api/v1/cart";
+    public final String getOrder = "https://marketcook.herokuapp.com/market/api/v1/orders";
+    public final String createOrder = "https://marketcook.herokuapp.com/market/api/v1/orders/confirm";
+    public final String getUser = "https://marketcook.herokuapp.com/market/profile/user";
 
     private MainActivity mainActivity;
     private List<Integer> idPicture;
