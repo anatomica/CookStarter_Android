@@ -14,12 +14,34 @@
         android:layout_weight="50"
         android:gravity="center"/>
 
+    <!-- ++ Mostovaya -->
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:id="@+id/itemMenuName"
+        android:layout_margin="10dp"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:background="#FFCDDC39"
+        android:textColor="#FF009688" />
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:id="@+id/itemMenuPrice"
+        android:layout_margin="5dp"
+        android:fontFamily="sans-serif"
+        android:textSize="20sp"
+        android:textColor="#FF009688"/>
+    <!-- Mostovaya -->
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="50"
         android:gravity="center">
-
         <Button
             android:id="@+id/minus"
             android:layout_width="45dp"
