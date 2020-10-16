@@ -17,6 +17,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+
+import java.math.BigDecimal;
+
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
 import ru.anatomica.cookstarter.entity.Restaurant;
@@ -38,6 +41,14 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
     private ImageView imageView;
     private Button addToCart;
     private TextView quantity;
+
+    //++ Mostovaya
+    private TextView itemMenuPrice;
+    private TextView itemMenuName;
+    private Button addCount;
+    private Button removeCount;
+    //-- Mostovaya
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -80,6 +91,11 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
             }
             if (o.getClass().getSimpleName().equals("RestaurantMenu")) {
                 RestaurantMenu selectedMenuItem = (RestaurantMenu) parent.getItemAtPosition(position);
+                //++ Mostovaya
+                String nameItemMenu = selectedMenuItem.getTitle();
+                BigDecimal price = selectedMenuItem.getPrice();
+                String description = selectedMenuItem.getDescription();
+                //-- Mostovaya
 
                 View newView = mInflater.inflate(R.layout.restaurant_item, mContainer, false);
                 placeholder.removeAllViews();
@@ -88,6 +104,14 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
                 imageView = newView.findViewById(R.id.main_logo);
                 addToCart = newView.findViewById(R.id.addToCart);
                 quantity = newView.findViewById(R.id.quantity);
+                //++ Mostovaya
+                addCount = newView.findViewById(R.id.plus);
+                removeCount = newView.findViewById(R.id.minus);
+                itemMenuName = newView.findViewById(R.id.itemMenuName);
+                itemMenuPrice = newView.findViewById(R.id.itemMenuPrice);
+                itemMenuName.setText(nameItemMenu);
+                itemMenuPrice.setText(price.toString());
+                //-- Mostovaya
 
                 imageView.setImageResource(selectedMenuItem.getLogoId());
                 quantity.setTextSize(40);
@@ -96,6 +120,28 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
                 addToCart.setOnClickListener(vi -> {
                     mainActivity.getRequest("addToCart", selectedMenuItem.getId());
                 });
+
+                //++ Mostovaya
+                addCount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int currentCount = new Integer((String) quantity.getText());
+                        currentCount++;
+                        quantity.setText(Integer.toString(currentCount));
+                    }
+                });
+
+                removeCount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int currentCount = new Integer((String) quantity.getText());
+                        if (currentCount!=1) {
+                            currentCount--;
+                            quantity.setText(Integer.toString(currentCount));
+                        }
+                    }
+                });
+                //-- Mostovaya
             }
         };
 
