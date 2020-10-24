@@ -34,7 +34,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         View root = inflater.inflate(R.layout.fragment_person, container, false);
-
         username = root.findViewById(R.id.name_person);
         email = root.findViewById(R.id.email_person);
         phone = root.findViewById(R.id.phone_person);
