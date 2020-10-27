@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+
+import java.lang.reflect.Field;
 import java.util.List;
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
@@ -50,4 +52,19 @@ public class ProfileFragment extends Fragment {
 
         return root;
     }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        User user = new User();
+
+        try {
+            Field fieldFirstName = user.getClass().getDeclaredField("firstName");
+            fieldFirstName.setAccessible(true);
+            String firstName = (String) fieldFirstName.get(user);
+            fieldFirstName.set(user, "new value");
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
