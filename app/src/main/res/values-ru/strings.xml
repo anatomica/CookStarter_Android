@@ -17,8 +17,16 @@
     <string name="prompt_password">Пароль</string>
     <string name="action_sign_in">Войти или зарегистрироваться</string>
     <string name="action_sign_in_short">Войти</string>
+    <string name="action_register">Регистрация</string>
     <string name="welcome">"Добро пожаловать, "</string>
     <string name="invalid_username">Неверное имя пользователя</string>
     <string name="invalid_password">Пароль должен быть более 2 символов</string>
     <string name="login_failed">"Ошибка входа!"</string>
+    <string name="desired_phone">Введите номер телефона</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="re_enter_password">Повторите пароль</string>
+    <string name="desired_username">Введите ваше имя</string>
+    <string name="enter_your_last_name">Введите фимилию</string>
+    <string name="enter_valid_email">Ведите Email</string>
+    <string name="registerButton">Зарегистрироваться</string>
 </resources>

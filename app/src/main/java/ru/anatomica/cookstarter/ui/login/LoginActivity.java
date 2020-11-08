@@ -27,6 +27,7 @@ import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
+import ru.anatomica.cookstarter.RegisterActivity;
 import ru.anatomica.cookstarter.data.LoginDataSource;
 import ru.anatomica.cookstarter.entity.Token;
 
@@ -49,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
+        final Button registerButton = findViewById(R.id.register);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
         loginViewModel.getLoginFormState().observe(this, loginFormState -> {
@@ -113,6 +115,13 @@ public class LoginActivity extends AppCompatActivity {
             loadingProgressBar.setVisibility(View.VISIBLE);
             getToken(usernameEditText.getText().toString(), passwordEditText.getText().toString());
         });
+
+        registerButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
         getToken("100", "100");
     }
 
