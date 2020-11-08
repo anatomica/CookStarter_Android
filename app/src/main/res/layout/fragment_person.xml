@@ -21,9 +21,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:scaleType="centerCrop"
-
-        android:src="@drawable/nav_menu_header2"
-         />
+        android:src="@drawable/nav_menu_header2"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"

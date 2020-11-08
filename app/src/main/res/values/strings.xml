@@ -17,8 +17,16 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
+    <string name="action_register">Register</string>
     <string name="welcome">"Welcome, "</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >2 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="desired_phone">Enter your phone</string>
+    <string name="enter_password">Enter password</string>
+    <string name="re_enter_password">Confirm your password</string>
+    <string name="desired_username">Enter your first name</string>
+    <string name="enter_your_last_name">Enter your last name</string>
+    <string name="enter_valid_email">Enter your email</string>
+    <string name="registerButton">Registration</string>
 </resources>

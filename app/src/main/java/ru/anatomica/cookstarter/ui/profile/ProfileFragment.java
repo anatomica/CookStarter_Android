@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -26,6 +30,7 @@ public class ProfileFragment extends Fragment {
     public static TextView username;
     public static TextView email;
     public static TextView phone;
+    public static ImageView editPerson;
 
     @Override
     public void onAttach(Activity activity) {
@@ -41,6 +46,9 @@ public class ProfileFragment extends Fragment {
         email = root.findViewById(R.id.email_person);
         phone = root.findViewById(R.id.phone_person);
 
+        //editPerson = root.findViewById(R.id.editPerson);
+
+
         username.setTextColor(Color.BLACK);
         username.setTextSize(25);
         email.setTextColor(Color.BLACK);
@@ -49,7 +57,6 @@ public class ProfileFragment extends Fragment {
         phone.setTextSize(25);
 
         mainActivity.getRequest("getUser", 1L);
-
         return root;
     }
 
@@ -67,4 +74,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    public void showDonutOrder(View view) {
+
+    }
 }
