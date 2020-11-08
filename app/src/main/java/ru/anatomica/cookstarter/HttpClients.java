@@ -1,5 +1,6 @@
 package ru.anatomica.cookstarter;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -24,6 +25,8 @@ public class HttpClients {
     public final String getOrder = "https://marketcook.herokuapp.com/market/api/v1/orders";
     public final String createOrder = "https://marketcook.herokuapp.com/market/api/v1/orders/confirm";
     public final String getUser = "https://marketcook.herokuapp.com/market/profile/user";
+    public final String increment = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
+    public final String decrement = "https://marketcook.herokuapp.com/market/api/v1/cart/decrement/";
 
     private MainActivity mainActivity;
     private List<Integer> idPicture;
@@ -56,6 +59,8 @@ public class HttpClients {
         if (type.equals("requestCart")) request = requestCart;
         if (type.equals("getOrder")) request = getOrder;
         if (type.equals("getUser")) request = getUser;
+        if (type.equals("increment")) request = increment + id;
+        if (type.equals("decrement")) request = decrement + id;
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.addHeader("Authorization", "Bearer " + LoginActivity.token);
@@ -73,20 +78,19 @@ public class HttpClients {
                     String json = new String(response, "UTF-8");
                     ObjectMapper mapper = new ObjectMapper();
                     System.out.println(json);
-                    String str = json.replace("\n", "");
-                    String str1 = json.replace("\"roles\" : [ ],", "");
+                    String str = json.replace("\"roles\" : [ ],", "");
 
                     // convert JSON array to List of objects
                     switch (type) {
                         case ("restaurants"):
-                            restaurantsList = Arrays.asList(mapper.readValue(str, Restaurant[].class));
+                            restaurantsList = mapper.readValue(json, new TypeReference<List<Restaurant>>(){});
                             restaurantsList.forEach(x -> System.out.println(x.getId() + ": " + x.getName()));
                             getRandomPicture();
                             for (int i = 0; i < restaurantsList.size(); i++) restaurantsList.get(i).setLogoId(idPicture.get(i));
                             loadRestaurants.callBack();
                             break;
                         case ("restaurantMenu"):
-                            restaurantListsMenu = Arrays.asList(mapper.readValue(str, RestaurantMenu[].class));
+                            restaurantListsMenu = mapper.readValue(json, new TypeReference<List<RestaurantMenu>>(){});
                             restaurantListsMenu.forEach(x -> System.out.println(x.getTitle() + ": " + x.getPrice()));
                             restaurantListsMenu.forEach(x -> x.setLogoId(idPicture.get(x.getLogoId() - 1)));
                             loadRestaurantsMenu.callBack();
@@ -95,19 +99,19 @@ public class HttpClients {
                             mainActivity.runOnUiThread(() -> mainActivity.serviceMessage("Добавлено"));
                             break;
                         case ("requestCart"):
-                            CartFragment.cartFilesList.clear();
-                            CartFragment.cartFilesList = Arrays.asList(mapper.readValue(str, Order[].class));
-                            CartFragment.cartFilesList.forEach(x -> System.out.println(x.getProductTitle() + " " + x.getPrice()));
-                            reloadCartTable.callBack();
-                            break;
                         case ("getOrder"):
-                            CartFragment.cartFilesList = Arrays.asList(mapper.readValue(str, Order[].class));
+                            CartFragment.cartFilesList.clear();
+                            CartFragment.cartFilesList = mapper.readValue(json, new TypeReference<List<Order>>(){});
                             CartFragment.cartFilesList.forEach(x -> System.out.println(x.getProductTitle() + " " + x.getPrice()));
                             reloadCartTable.callBack();
                             break;
                         case ("getUser"):
-                            ProfileFragment.userProfile = Arrays.asList(mapper.readValue(str1, User.class));
+                            ProfileFragment.userProfile = Arrays.asList(mapper.readValue(str, User.class));
                             setProfile.callBack();
+                            break;
+                        case ("increment"):
+                        case ("decrement"):
+                            mainActivity.getRequest("requestCart", 1L);
                             break;
                     }
                 } catch (Exception e) {

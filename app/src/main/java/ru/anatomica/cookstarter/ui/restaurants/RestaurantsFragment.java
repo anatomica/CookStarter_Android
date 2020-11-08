@@ -1,5 +1,6 @@
 package ru.anatomica.cookstarter.ui.restaurants;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -13,13 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-
 import java.math.BigDecimal;
-
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
 import ru.anatomica.cookstarter.entity.Restaurant;
@@ -41,14 +39,11 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
     private ImageView imageView;
     private Button addToCart;
     private TextView quantity;
-
-    //++ Mostovaya
     private TextView itemMenuPrice;
     private TextView itemMenuName;
     private Button addCount;
     private Button removeCount;
-    //-- Mostovaya
-
+    private int currentCount = 1;
 
     @Override
     public void onAttach(Activity activity) {
@@ -81,6 +76,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        @SuppressLint("SetTextI18n")
         AdapterView.OnItemClickListener itemListener = (parent, v, position, id) -> {
             // получаем выбранный пункт
             Object o = parent.getItemAtPosition(position);
@@ -91,11 +87,6 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
             }
             if (o.getClass().getSimpleName().equals("RestaurantMenu")) {
                 RestaurantMenu selectedMenuItem = (RestaurantMenu) parent.getItemAtPosition(position);
-                //++ Mostovaya
-                String nameItemMenu = selectedMenuItem.getTitle();
-                BigDecimal price = selectedMenuItem.getPrice();
-                String description = selectedMenuItem.getDescription();
-                //-- Mostovaya
 
                 View newView = mInflater.inflate(R.layout.restaurant_item, mContainer, false);
                 placeholder.removeAllViews();
@@ -104,44 +95,41 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
                 imageView = newView.findViewById(R.id.main_logo);
                 addToCart = newView.findViewById(R.id.addToCart);
                 quantity = newView.findViewById(R.id.quantity);
-                //++ Mostovaya
                 addCount = newView.findViewById(R.id.plus);
                 removeCount = newView.findViewById(R.id.minus);
                 itemMenuName = newView.findViewById(R.id.itemMenuName);
                 itemMenuPrice = newView.findViewById(R.id.itemMenuPrice);
+
+                String nameItemMenu = selectedMenuItem.getTitle();
+                BigDecimal price = selectedMenuItem.getPrice();
+                String description = selectedMenuItem.getDescription();
+
                 itemMenuName.setText(nameItemMenu);
-                itemMenuPrice.setText(price.toString());
-                //-- Mostovaya
+                itemMenuPrice.setText(price + " руб.");
 
                 imageView.setImageResource(selectedMenuItem.getLogoId());
                 quantity.setTextSize(40);
                 quantity.setText("1");
                 quantity.setGravity(Gravity.CENTER | Gravity.BOTTOM);
                 addToCart.setOnClickListener(vi -> {
-                    mainActivity.getRequest("addToCart", selectedMenuItem.getId());
+                    for (int i = 0; i < currentCount; i++) {
+                        mainActivity.getRequest("addToCart", selectedMenuItem.getId());
+                    }
                 });
 
-                //++ Mostovaya
-                addCount.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int currentCount = new Integer((String) quantity.getText());
-                        currentCount++;
+                addCount.setOnClickListener(view1 -> {
+                    currentCount = Integer.parseInt(quantity.getText().toString());
+                    currentCount++;
+                    quantity.setText(Integer.toString(currentCount));
+                });
+
+                removeCount.setOnClickListener(view2 -> {
+                    currentCount = Integer.parseInt(quantity.getText().toString());
+                    if (currentCount > 1) {
+                        currentCount--;
                         quantity.setText(Integer.toString(currentCount));
                     }
                 });
-
-                removeCount.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int currentCount = new Integer((String) quantity.getText());
-                        if (currentCount!=1) {
-                            currentCount--;
-                            quantity.setText(Integer.toString(currentCount));
-                        }
-                    }
-                });
-                //-- Mostovaya
             }
         };
 
