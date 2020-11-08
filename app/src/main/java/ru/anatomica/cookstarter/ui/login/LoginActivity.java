@@ -116,13 +116,13 @@ public class LoginActivity extends AppCompatActivity {
             getToken(usernameEditText.getText().toString(), passwordEditText.getText().toString());
         });
 
-        registerButton.setOnClickListener(v->{
+        registerButton.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
             finish();
-
         });
-        //getToken("100", "100");
+
+        getToken("100", "100");
     }
 
     private void updateUiWithUser(LoggedInUserView model) {

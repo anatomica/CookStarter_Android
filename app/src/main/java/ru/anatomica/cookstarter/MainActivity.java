@@ -11,7 +11,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    
     private HttpClients httpClients;
     private ButtonsCreate buttonsCreate;
 
@@ -33,8 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        // shutdown();
+        // super.onBackPressed();
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        if (count == 0) {
+            super.onBackPressed();
+            // additional code
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 
     public void getRequest(String type, Long id) {

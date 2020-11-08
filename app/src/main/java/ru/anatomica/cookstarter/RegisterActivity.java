@@ -1,28 +1,25 @@
 package ru.anatomica.cookstarter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
-
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import ru.anatomica.cookstarter.data.LoginDataSource;
 import ru.anatomica.cookstarter.entity.Token;
+import ru.anatomica.cookstarter.ui.login.LoginActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -36,30 +33,31 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        editPhone = (EditText) findViewById(R.id.editPhone);
-        editPassword = (EditText) findViewById(R.id.editPassword);
-        editConfirmPass = (EditText) findViewById(R.id.editConfirmPass);
-        editFirstName = (EditText) findViewById(R.id.editFirstName);
-        editLastName = (EditText) findViewById(R.id.editLastName);
-        editEmail = (EditText) findViewById(R.id.editEmail);
-        buttonReg = (Button) findViewById(R.id.register);
+        editPhone = findViewById(R.id.editPhone);
+        editPassword = findViewById(R.id.editPassword);
+        editConfirmPass = findViewById(R.id.editConfirmPass);
+        editFirstName = findViewById(R.id.editFirstName);
+        editLastName = findViewById(R.id.editLastName);
+        editEmail = findViewById(R.id.editEmail);
+        buttonReg = findViewById(R.id.register);
 
-        buttonReg.setOnClickListener(new View.OnClickListener() {
+        buttonReg.setOnClickListener(view -> {
+            String phone = editPhone.getText().toString();
+            String password = editPassword.getText().toString();
+            String firstName = editFirstName.getText().toString();
+            String lastName = editLastName.getText().toString();
+            String email = editEmail.getText().toString();
+            String confirmPassword = editConfirmPass.getText().toString();
 
-            @Override
-            public void onClick(View view) {
-                String phone = editPhone.getText().toString();
-                String password = editPassword.getText().toString();
-                String firstName = editFirstName.getText().toString();
-                String lastName = editLastName.getText().toString();
-                String email = editEmail.getText().toString();
-                String confirmPassword = editConfirmPass.getText().toString();
-
-                getToken(phone, password, confirmPassword, firstName, lastName, email);
-            }
+            getToken(phone, password, confirmPassword, firstName, lastName, email);
         });
+    }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void getToken(String phone, String password, String confirmPass, String firstName, String lastName, String email) {
@@ -123,5 +121,4 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
 }
