@@ -61,7 +61,7 @@ public class RestaurantsAdapter extends ArrayAdapter<Restaurant> implements Filt
         Restaurant restaurant = restaurants.get(position);
 
         // logoView.setImageResource(restaurant.getPictureId());
-        logoView.setImageBitmap(HttpClients.images.get(position));
+        logoView.setImageBitmap(HttpClients.imagesRestaurants.get(position));
         nameView.setText(restaurant.getName());
         addressView.setText(restaurant.getAddress());
 

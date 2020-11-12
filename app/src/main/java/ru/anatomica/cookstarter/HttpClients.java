@@ -9,7 +9,6 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,22 +23,26 @@ public class HttpClients {
 
 //    public final String restaurants = "https://marketcook.herokuapp.com/market/api/v1/restaurants";
 //    public final String restaurantMenu = "https://marketcook.herokuapp.com/market/api/v1/products/";
+
 //    public final String addToCart = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
 //    public final String requestCart = "https://marketcook.herokuapp.com/market/api/v1/cart";
 //    public final String getOrder = "https://marketcook.herokuapp.com/market/api/v1/orders";
 //    public final String createOrder = "https://marketcook.herokuapp.com/market/api/v1/orders/confirm";
+
 //    public final String getUser = "https://marketcook.herokuapp.com/market/profile/user";
 //    public final String increment = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
 //    public final String decrement = "https://marketcook.herokuapp.com/market/api/v1/cart/decrement/";
 
     public final String restaurants = "https://cookstarter-restaurant-service.herokuapp.com/restaurant/getAll";
     public final String restaurantMenu = "https://cookstarter-restaurant-service.herokuapp.com/menu/get/";
-    public final String getPicture = "https://picture-service.herokuapp.com/picture/restaurant/get/";
+    public final String getRestaurantPicture = "https://picture-service.herokuapp.com/picture/restaurant/get/";
+    public final String getMenuPicture = "https://picture-service.herokuapp.com/picture/menu/get/";
 
-    public final String addToCart = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
-    public final String requestCart = "https://marketcook.herokuapp.com/market/api/v1/cart";
-    public final String getOrder = "https://marketcook.herokuapp.com/market/api/v1/orders";
-    public final String createOrder = "https://marketcook.herokuapp.com/market/api/v1/orders/confirm";
+    public final String addToCart = "";
+    public final String requestCart = "";
+    public final String createOrder = "https://cs-order-service.herokuapp.com/orders/add";
+    public final String getOrder = "https://cs-order-service.herokuapp.com/orders/get/";
+
     public final String getUser = "https://marketcook.herokuapp.com/market/profile/user";
     public final String increment = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
     public final String decrement = "https://marketcook.herokuapp.com/market/api/v1/cart/decrement/";
@@ -54,9 +57,11 @@ public class HttpClients {
 
     public static List<Restaurant> restaurantsList = new ArrayList<>();
     public static List<RestaurantMenu> restaurantListsMenu = new ArrayList<>();
-    public static List<Bitmap> images = new ArrayList<>();
+    public static List<Bitmap> imagesRestaurants = new ArrayList<>();
+    public static List<Bitmap> imagesMenus = new ArrayList<>();
     private Bitmap image;
-    private int count = 1;
+    private int countOfRestaurants = 1;
+    private int countOfMenus = 0;
 
     public HttpClients() {
     }
@@ -74,10 +79,11 @@ public class HttpClients {
         String request = null;
         if (type.equals("restaurants")) request = restaurants;
         if (type.equals("restaurantMenu")) request = restaurantMenu + id;
-        if (type.equals("getPicture")) request = getPicture + id + "?Authorization=Bearer " + LoginActivity.token;
+        if (type.equals("getRestaurantPicture")) request = getRestaurantPicture + id + "?Authorization=Bearer " + LoginActivity.token;
+        if (type.equals("getMenuPicture")) request = getMenuPicture + id + "?Authorization=Bearer " + LoginActivity.token;
         if (type.equals("addToCart")) request = addToCart + id;
         if (type.equals("requestCart")) request = requestCart;
-        if (type.equals("getOrder")) request = getOrder;
+        if (type.equals("getOrder")) request = getOrder + id;
         if (type.equals("getUser")) request = getUser;
         if (type.equals("increment")) request = increment + id;
         if (type.equals("decrement")) request = decrement + id;
@@ -106,24 +112,35 @@ public class HttpClients {
                             restaurantsList = mapper.readValue(json, new TypeReference<List<Restaurant>>(){});
                             restaurantsList.forEach(x -> System.out.println(x.getId() + ": " + x.getName() + ": " + x.getPictureId()));
                             // getPicture();
-                            restaurantsList.forEach(x -> mainActivity.getRequest("getPicture", (long) x.getPictureId()));
+                            restaurantsList.forEach(x -> mainActivity.getRequest("getRestaurantPicture", (long) x.getPictureId()));
                             break;
                         case ("restaurantMenu"):
                             restaurantListsMenu = mapper.readValue(json, new TypeReference<List<RestaurantMenu>>(){});
-                            restaurantListsMenu.forEach(x -> System.out.println(x.getName() + ": " + x.getPrice()));
+                            restaurantListsMenu.forEach(x -> System.out.println(x.getName() + ": " + x.getPrice() + ": " + x.getPictureId()));
                             // restaurantListsMenu.forEach(x -> x.setPictureId(idPicture.get(x.getPictureId() - 1)));
-                            restaurantListsMenu.forEach(x -> x.setPictureId(idPicture.get(getRandomPicture())));
-                            loadRestaurantsMenu.callBack();
+                            // restaurantListsMenu.forEach(x -> x.setPictureId(idPicture.get(getRandomPicture())));
+                            restaurantListsMenu.forEach(x -> mainActivity.getRequest("getMenuPicture", (long) x.getPictureId()));
                             break;
-                        case ("getPicture"):
-                            if (count <= restaurantsList.size())  {
+                        case ("getRestaurantPicture"):
+                            if (countOfRestaurants <= restaurantsList.size())  {
                                 image = BitmapFactory.decodeByteArray(response, 0, response.length);
-                                images.add(image);
-                                count++;
+                                imagesRestaurants.add(image);
+                                countOfRestaurants++;
                             }
-                            if (count == restaurantsList.size())  {
+                            if (countOfRestaurants == restaurantsList.size())  {
                                 loadRestaurants.callBack();
-                                count = 1;
+                                countOfRestaurants = 1;
+                            }
+                            break;
+                        case ("getMenuPicture"):
+                            if (countOfMenus <= restaurantListsMenu.size())  {
+                                image = BitmapFactory.decodeByteArray(response, 0, response.length);
+                                imagesMenus.add(image);
+                                countOfMenus++;
+                            }
+                            if (countOfMenus == restaurantListsMenu.size())  {
+                                loadRestaurantsMenu.callBack();
+                                countOfMenus = 0;
                             }
                             break;
                         case ("addToCart"):

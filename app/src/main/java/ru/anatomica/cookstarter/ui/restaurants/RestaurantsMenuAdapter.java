@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.anatomica.cookstarter.HttpClients;
 import ru.anatomica.cookstarter.R;
 import ru.anatomica.cookstarter.entity.RestaurantMenu;
 
@@ -63,7 +64,8 @@ public class RestaurantsMenuAdapter extends ArrayAdapter<RestaurantMenu> impleme
 
         RestaurantMenu restaurant = restaurants.get(position);
 
-        logoView.setImageResource(restaurant.getPictureId());
+        // logoView.setImageResource(restaurant.getPictureId());
+        logoView.setImageBitmap(HttpClients.imagesMenus.get(position));
         nameView.setText(restaurant.getName());
         addressView.setText(restaurant.getPrice().toString() + " руб.");
 

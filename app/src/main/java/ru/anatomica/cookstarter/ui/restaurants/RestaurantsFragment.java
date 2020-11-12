@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import java.math.BigDecimal;
+
+import ru.anatomica.cookstarter.HttpClients;
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
 import ru.anatomica.cookstarter.entity.Restaurant;
@@ -107,7 +109,8 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
                 itemMenuName.setText(nameItemMenu);
                 itemMenuPrice.setText(price + " руб.");
 
-                imageView.setImageResource(selectedMenuItem.getPictureId());
+                // imageView.setImageResource(selectedMenuItem.getPictureId());
+                imageView.setImageBitmap(HttpClients.imagesMenus.get(position));
                 quantity.setTextSize(40);
                 quantity.setText("1");
                 quantity.setGravity(Gravity.CENTER | Gravity.BOTTOM);
