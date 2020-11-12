@@ -100,14 +100,14 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
                 itemMenuName = newView.findViewById(R.id.itemMenuName);
                 itemMenuPrice = newView.findViewById(R.id.itemMenuPrice);
 
-                String nameItemMenu = selectedMenuItem.getTitle();
+                String nameItemMenu = selectedMenuItem.getName();
                 BigDecimal price = selectedMenuItem.getPrice();
                 String description = selectedMenuItem.getDescription();
 
                 itemMenuName.setText(nameItemMenu);
                 itemMenuPrice.setText(price + " руб.");
 
-                imageView.setImageResource(selectedMenuItem.getLogoId());
+                imageView.setImageResource(selectedMenuItem.getPictureId());
                 quantity.setTextSize(40);
                 quantity.setText("1");
                 quantity.setGravity(Gravity.CENTER | Gravity.BOTTOM);

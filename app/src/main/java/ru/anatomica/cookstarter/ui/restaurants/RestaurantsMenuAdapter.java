@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.anatomica.cookstarter.R;
-import ru.anatomica.cookstarter.entity.Restaurant;
 import ru.anatomica.cookstarter.entity.RestaurantMenu;
 
 public class RestaurantsMenuAdapter extends ArrayAdapter<RestaurantMenu> implements Filterable {
@@ -64,8 +63,8 @@ public class RestaurantsMenuAdapter extends ArrayAdapter<RestaurantMenu> impleme
 
         RestaurantMenu restaurant = restaurants.get(position);
 
-        logoView.setImageResource(restaurant.getLogoId());
-        nameView.setText(restaurant.getTitle());
+        logoView.setImageResource(restaurant.getPictureId());
+        nameView.setText(restaurant.getName());
         addressView.setText(restaurant.getPrice().toString() + " руб.");
 
         return view;
@@ -89,14 +88,14 @@ public class RestaurantsMenuAdapter extends ArrayAdapter<RestaurantMenu> impleme
             if (constraint != null && constraint.length() > 0) {
                 ArrayList<RestaurantMenu> filterList = new ArrayList<>();
                 for (int i = 0; i < mStringFilterList.size(); i++) {
-                    if ((mStringFilterList.get(i).getTitle().toUpperCase())
+                    if ((mStringFilterList.get(i).getName().toUpperCase())
                             .contains(constraint.toString().toUpperCase())) {
 
                         RestaurantMenu restaurant = new RestaurantMenu(
                                 mStringFilterList.get(i).getId(),
-                                mStringFilterList.get(i).getTitle(),
+                                mStringFilterList.get(i).getName(),
                                 mStringFilterList.get(i).getPrice(),
-                                mStringFilterList.get(i).getLogoId());
+                                mStringFilterList.get(i).getPictureId());
                         filterList.add(restaurant);
                     }
                 }

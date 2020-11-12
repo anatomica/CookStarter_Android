@@ -1,11 +1,15 @@
 package ru.anatomica.cookstarter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,8 +22,20 @@ import ru.anatomica.cookstarter.ui.profile.ProfileFragment;
 
 public class HttpClients {
 
-    public final String restaurants = "https://marketcook.herokuapp.com/market/api/v1/restaurants";
-    public final String restaurantMenu = "https://marketcook.herokuapp.com/market/api/v1/products/";
+//    public final String restaurants = "https://marketcook.herokuapp.com/market/api/v1/restaurants";
+//    public final String restaurantMenu = "https://marketcook.herokuapp.com/market/api/v1/products/";
+//    public final String addToCart = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
+//    public final String requestCart = "https://marketcook.herokuapp.com/market/api/v1/cart";
+//    public final String getOrder = "https://marketcook.herokuapp.com/market/api/v1/orders";
+//    public final String createOrder = "https://marketcook.herokuapp.com/market/api/v1/orders/confirm";
+//    public final String getUser = "https://marketcook.herokuapp.com/market/profile/user";
+//    public final String increment = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
+//    public final String decrement = "https://marketcook.herokuapp.com/market/api/v1/cart/decrement/";
+
+    public final String restaurants = "https://cookstarter-restaurant-service.herokuapp.com/restaurant/getAll";
+    public final String restaurantMenu = "https://cookstarter-restaurant-service.herokuapp.com/menu/get/";
+    public final String getPicture = "https://picture-service.herokuapp.com/picture/restaurant/get/";
+
     public final String addToCart = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
     public final String requestCart = "https://marketcook.herokuapp.com/market/api/v1/cart";
     public final String getOrder = "https://marketcook.herokuapp.com/market/api/v1/orders";
@@ -38,6 +54,9 @@ public class HttpClients {
 
     public static List<Restaurant> restaurantsList = new ArrayList<>();
     public static List<RestaurantMenu> restaurantListsMenu = new ArrayList<>();
+    public static List<Bitmap> images = new ArrayList<>();
+    private Bitmap image;
+    private int count = 1;
 
     public HttpClients() {
     }
@@ -55,6 +74,7 @@ public class HttpClients {
         String request = null;
         if (type.equals("restaurants")) request = restaurants;
         if (type.equals("restaurantMenu")) request = restaurantMenu + id;
+        if (type.equals("getPicture")) request = getPicture + id + "?Authorization=Bearer " + LoginActivity.token;
         if (type.equals("addToCart")) request = addToCart + id;
         if (type.equals("requestCart")) request = requestCart;
         if (type.equals("getOrder")) request = getOrder;
@@ -77,23 +97,34 @@ public class HttpClients {
                 try {
                     String json = new String(response, "UTF-8");
                     ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(json);
+                    // System.out.println(json);
                     String str = json.replace("\"roles\" : [ ],", "");
 
                     // convert JSON array to List of objects
                     switch (type) {
                         case ("restaurants"):
                             restaurantsList = mapper.readValue(json, new TypeReference<List<Restaurant>>(){});
-                            restaurantsList.forEach(x -> System.out.println(x.getId() + ": " + x.getName()));
-                            getRandomPicture();
-                            for (int i = 0; i < restaurantsList.size(); i++) restaurantsList.get(i).setLogoId(idPicture.get(i));
-                            loadRestaurants.callBack();
+                            restaurantsList.forEach(x -> System.out.println(x.getId() + ": " + x.getName() + ": " + x.getPictureId()));
+                            // getPicture();
+                            restaurantsList.forEach(x -> mainActivity.getRequest("getPicture", (long) x.getPictureId()));
                             break;
                         case ("restaurantMenu"):
                             restaurantListsMenu = mapper.readValue(json, new TypeReference<List<RestaurantMenu>>(){});
-                            restaurantListsMenu.forEach(x -> System.out.println(x.getTitle() + ": " + x.getPrice()));
-                            restaurantListsMenu.forEach(x -> x.setLogoId(idPicture.get(x.getLogoId() - 1)));
+                            restaurantListsMenu.forEach(x -> System.out.println(x.getName() + ": " + x.getPrice()));
+                            // restaurantListsMenu.forEach(x -> x.setPictureId(idPicture.get(x.getPictureId() - 1)));
+                            restaurantListsMenu.forEach(x -> x.setPictureId(idPicture.get(getRandomPicture())));
                             loadRestaurantsMenu.callBack();
+                            break;
+                        case ("getPicture"):
+                            if (count <= restaurantsList.size())  {
+                                image = BitmapFactory.decodeByteArray(response, 0, response.length);
+                                images.add(image);
+                                count++;
+                            }
+                            if (count == restaurantsList.size())  {
+                                loadRestaurants.callBack();
+                                count = 1;
+                            }
                             break;
                         case ("addToCart"):
                             mainActivity.runOnUiThread(() -> mainActivity.serviceMessage("Добавлено"));
@@ -181,7 +212,7 @@ public class HttpClients {
         });
     }
 
-    private void getRandomPicture() {
+    private void getPicture() {
         idPicture = new ArrayList<>();
         idPicture.add(R.drawable.hardrock);
         idPicture.add(R.drawable.mcdonalds);
@@ -189,9 +220,11 @@ public class HttpClients {
         idPicture.add(R.drawable.rootslogo);
         idPicture.add(R.drawable.roppolos);
         idPicture.add(R.drawable.tacobell);
-
-        final Random rand = new Random();
-        final int rndInt = rand.nextInt(idPicture.size());
+        idPicture.add(R.drawable.tacobell);
     }
 
+    private int getRandomPicture() {
+        final Random rand = new Random();
+        return rand.nextInt(idPicture.size());
+    }
 }

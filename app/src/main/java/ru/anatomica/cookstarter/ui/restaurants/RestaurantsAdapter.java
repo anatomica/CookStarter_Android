@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
+import ru.anatomica.cookstarter.HttpClients;
 import ru.anatomica.cookstarter.R;
 import ru.anatomica.cookstarter.entity.Restaurant;
 
@@ -58,7 +60,8 @@ public class RestaurantsAdapter extends ArrayAdapter<Restaurant> implements Filt
 
         Restaurant restaurant = restaurants.get(position);
 
-        logoView.setImageResource(restaurant.getLogoId());
+        // logoView.setImageResource(restaurant.getPictureId());
+        logoView.setImageBitmap(HttpClients.images.get(position));
         nameView.setText(restaurant.getName());
         addressView.setText(restaurant.getAddress());
 
@@ -90,7 +93,7 @@ public class RestaurantsAdapter extends ArrayAdapter<Restaurant> implements Filt
                                 mStringFilterList.get(i).getId(),
                                 mStringFilterList.get(i).getName(),
                                 mStringFilterList.get(i).getAddress(),
-                                mStringFilterList.get(i).getLogoId());
+                                mStringFilterList.get(i).getPictureId());
                         filterList.add(restaurant);
                     }
                 }

@@ -5,35 +5,35 @@ import java.math.BigDecimal;
 public class RestaurantMenu {
 
     private Long id;
-    private String title;
+    private String name;
     private String description;
     private BigDecimal price;
     private Long restaurantId;
-    private int logoId;
+    private int pictureId;
 
     public RestaurantMenu() {
     }
 
-    public RestaurantMenu(String title, BigDecimal price, int logoId) {
-        this.title = title;
+    public RestaurantMenu(String name, BigDecimal price, int pictureId) {
+        this.name = name;
         this.price = price;
-        this.logoId = logoId;
+        this.pictureId = pictureId;
     }
 
-    public RestaurantMenu(Long id, String title, BigDecimal price, int logoId) {
+    public RestaurantMenu(Long id, String name, BigDecimal price, int pictureId) {
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.price = price;
-        this.logoId = logoId;
+        this.pictureId = pictureId;
     }
 
-    public RestaurantMenu(Long id, String title, String description, BigDecimal price, Long restaurantId, int logoId) {
+    public RestaurantMenu(Long id, String name, String description, BigDecimal price, Long restaurantId, int pictureId) {
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.description = description;
         this.price = price;
         this.restaurantId = restaurantId;
-        this.logoId = logoId;
+        this.pictureId = pictureId;
     }
 
     public Long getId() {
@@ -44,12 +44,12 @@ public class RestaurantMenu {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -76,11 +76,11 @@ public class RestaurantMenu {
         this.restaurantId = restaurantId;
     }
 
-    public int getLogoId() {
-        return logoId;
+    public int getPictureId() {
+        return pictureId;
     }
 
-    public void setLogoId(int logoId) {
-        this.logoId = logoId;
+    public void setPictureId(int pictureId) {
+        this.pictureId = pictureId;
     }
 }
