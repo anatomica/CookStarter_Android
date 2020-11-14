@@ -18,16 +18,19 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import java.math.BigDecimal;
-
+import java.util.ArrayList;
+import java.util.List;
 import ru.anatomica.cookstarter.HttpClients;
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
+import ru.anatomica.cookstarter.entity.Order;
 import ru.anatomica.cookstarter.entity.Restaurant;
 import ru.anatomica.cookstarter.entity.RestaurantMenu;
 
 public class RestaurantsFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     public static ListView restaurantsList;
+    public static List<Order> cartFilesList = new ArrayList<>();
 
     private RestaurantsViewModel restaurantsViewModel;
     private MainActivity mainActivity;
@@ -109,15 +112,18 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
                 itemMenuName.setText(nameItemMenu);
                 itemMenuPrice.setText(price + " руб.");
 
-                // imageView.setImageResource(selectedMenuItem.getPictureId());
                 imageView.setImageBitmap(HttpClients.imagesMenus.get(position));
                 quantity.setTextSize(40);
                 quantity.setText("1");
                 quantity.setGravity(Gravity.CENTER | Gravity.BOTTOM);
                 addToCart.setOnClickListener(vi -> {
-                    for (int i = 0; i < currentCount; i++) {
-                        mainActivity.getRequest("addToCart", selectedMenuItem.getId());
-                    }
+                    Order order = new Order();
+                    order.setId(selectedMenuItem.getId());
+                    order.setName(selectedMenuItem.getName());
+                    order.setPrice(selectedMenuItem.getPrice());
+                    order.setRestaurantId(selectedMenuItem.getRestaurantId());
+                    order.setQuantity(currentCount);
+                    cartFilesList.add(order);
                 });
 
                 addCount.setOnClickListener(view1 -> {

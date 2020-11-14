@@ -2,33 +2,31 @@ package ru.anatomica.cookstarter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 import ru.anatomica.cookstarter.entity.*;
-import ru.anatomica.cookstarter.ui.cart.CartFragment;
 import ru.anatomica.cookstarter.ui.login.LoginActivity;
 import ru.anatomica.cookstarter.ui.profile.ProfileFragment;
+import ru.anatomica.cookstarter.ui.restaurants.RestaurantsFragment;
 
 public class HttpClients {
 
 //    public final String restaurants = "https://marketcook.herokuapp.com/market/api/v1/restaurants";
 //    public final String restaurantMenu = "https://marketcook.herokuapp.com/market/api/v1/products/";
-
 //    public final String addToCart = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
 //    public final String requestCart = "https://marketcook.herokuapp.com/market/api/v1/cart";
 //    public final String getOrder = "https://marketcook.herokuapp.com/market/api/v1/orders";
 //    public final String createOrder = "https://marketcook.herokuapp.com/market/api/v1/orders/confirm";
-
 //    public final String getUser = "https://marketcook.herokuapp.com/market/profile/user";
 //    public final String increment = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
 //    public final String decrement = "https://marketcook.herokuapp.com/market/api/v1/cart/decrement/";
@@ -38,18 +36,14 @@ public class HttpClients {
     public final String getRestaurantPicture = "https://picture-service.herokuapp.com/picture/restaurant/get/";
     public final String getMenuPicture = "https://picture-service.herokuapp.com/picture/menu/get/";
 
-    public final String addToCart = "";
-    public final String requestCart = "";
     public final String createOrder = "https://cs-order-service.herokuapp.com/orders/add";
     public final String getOrder = "https://cs-order-service.herokuapp.com/orders/get/";
 
-    public final String getUser = "https://marketcook.herokuapp.com/market/profile/user";
     public final String increment = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
     public final String decrement = "https://marketcook.herokuapp.com/market/api/v1/cart/decrement/";
+    public final String getUser = "https://marketcook.herokuapp.com/market/profile/user";
 
     private MainActivity mainActivity;
-    private List<Integer> idPicture;
-
     private static Callback loadRestaurants;
     private static Callback loadRestaurantsMenu;
     private static Callback reloadCartTable;
@@ -81,8 +75,6 @@ public class HttpClients {
         if (type.equals("restaurantMenu")) request = restaurantMenu + id;
         if (type.equals("getRestaurantPicture")) request = getRestaurantPicture + id + "?Authorization=Bearer " + LoginActivity.token;
         if (type.equals("getMenuPicture")) request = getMenuPicture + id + "?Authorization=Bearer " + LoginActivity.token;
-        if (type.equals("addToCart")) request = addToCart + id;
-        if (type.equals("requestCart")) request = requestCart;
         if (type.equals("getOrder")) request = getOrder + id;
         if (type.equals("getUser")) request = getUser;
         if (type.equals("increment")) request = increment + id;
@@ -103,7 +95,6 @@ public class HttpClients {
                 try {
                     String json = new String(response, "UTF-8");
                     ObjectMapper mapper = new ObjectMapper();
-                    // System.out.println(json);
                     String str = json.replace("\"roles\" : [ ],", "");
 
                     // convert JSON array to List of objects
@@ -111,14 +102,11 @@ public class HttpClients {
                         case ("restaurants"):
                             restaurantsList = mapper.readValue(json, new TypeReference<List<Restaurant>>(){});
                             restaurantsList.forEach(x -> System.out.println(x.getId() + ": " + x.getName() + ": " + x.getPictureId()));
-                            // getPicture();
                             restaurantsList.forEach(x -> mainActivity.getRequest("getRestaurantPicture", (long) x.getPictureId()));
                             break;
                         case ("restaurantMenu"):
                             restaurantListsMenu = mapper.readValue(json, new TypeReference<List<RestaurantMenu>>(){});
                             restaurantListsMenu.forEach(x -> System.out.println(x.getName() + ": " + x.getPrice() + ": " + x.getPictureId()));
-                            // restaurantListsMenu.forEach(x -> x.setPictureId(idPicture.get(x.getPictureId() - 1)));
-                            // restaurantListsMenu.forEach(x -> x.setPictureId(idPicture.get(getRandomPicture())));
                             restaurantListsMenu.forEach(x -> mainActivity.getRequest("getMenuPicture", (long) x.getPictureId()));
                             break;
                         case ("getRestaurantPicture"):
@@ -146,11 +134,10 @@ public class HttpClients {
                         case ("addToCart"):
                             mainActivity.runOnUiThread(() -> mainActivity.serviceMessage("Добавлено"));
                             break;
-                        case ("requestCart"):
                         case ("getOrder"):
-                            CartFragment.cartFilesList.clear();
-                            CartFragment.cartFilesList = mapper.readValue(json, new TypeReference<List<Order>>(){});
-                            CartFragment.cartFilesList.forEach(x -> System.out.println(x.getProductTitle() + " " + x.getPrice()));
+                            RestaurantsFragment.cartFilesList.clear();
+                            RestaurantsFragment.cartFilesList = mapper.readValue(json, new TypeReference<List<Order>>(){});
+                            RestaurantsFragment.cartFilesList.forEach(x -> System.out.println(x.getName() + " " + x.getPrice()));
                             reloadCartTable.callBack();
                             break;
                         case ("getUser"):
@@ -184,15 +171,31 @@ public class HttpClients {
         });
     }
 
-    public void postRequest(String address, String phone) {
+    public void postRequest(String request) {
 
-        RequestParams params = new RequestParams();
-        params.put("address", address);
-        params.put("phone", phone);
+        JSONObject myOrder = new JSONObject();
+        JSONObject dishes = new JSONObject();
+        JSONObject items = new JSONObject();
 
+        try {
+            myOrder.put("customerId", 55);
+            myOrder.put("restaurantId", RestaurantsFragment.cartFilesList.get(0).getRestaurantId());
+
+            for (Order order: RestaurantsFragment.cartFilesList) {
+                items.put("price", order.getPrice());
+                items.put("quantity", order.getQuantity());
+                dishes.put(order.getId().toString(), items);
+            }
+
+            myOrder.put("dishes", dishes);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        StringEntity entity = new StringEntity(myOrder.toString(), "UTF-8");
         AsyncHttpClient client = new AsyncHttpClient();
         client.addHeader("Authorization", "Bearer " + LoginActivity.token);
-        client.post(createOrder, params, new AsyncHttpResponseHandler() {
+        client.post(mainActivity, createOrder, entity, "application/json", new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -206,7 +209,8 @@ public class HttpClients {
                     String json = new String(response, "UTF-8");
                     ObjectMapper mapper = new ObjectMapper();
                     System.out.println(json);
-
+                    Status status = mapper.readValue(json, new TypeReference<Status>(){});
+                    mainActivity.getRequest("getOrder", status.getId());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -227,21 +231,5 @@ public class HttpClients {
                 System.out.println("called when request is retried");
             }
         });
-    }
-
-    private void getPicture() {
-        idPicture = new ArrayList<>();
-        idPicture.add(R.drawable.hardrock);
-        idPicture.add(R.drawable.mcdonalds);
-        idPicture.add(R.drawable.pablochef);
-        idPicture.add(R.drawable.rootslogo);
-        idPicture.add(R.drawable.roppolos);
-        idPicture.add(R.drawable.tacobell);
-        idPicture.add(R.drawable.tacobell);
-    }
-
-    private int getRandomPicture() {
-        final Random rand = new Random();
-        return rand.nextInt(idPicture.size());
     }
 }

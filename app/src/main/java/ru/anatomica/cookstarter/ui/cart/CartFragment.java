@@ -9,11 +9,8 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import java.util.ArrayList;
-import java.util.List;
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
-import ru.anatomica.cookstarter.entity.Order;
 
 public class CartFragment extends Fragment {
 
@@ -24,7 +21,6 @@ public class CartFragment extends Fragment {
     private ViewGroup mContainer;
 
     public static TableLayout cartTableLayout;
-    public static List<Order> cartFilesList;
     public static Button sendOrder;
 
     @Override
@@ -42,10 +38,8 @@ public class CartFragment extends Fragment {
 
         cartTableLayout = view.findViewById(R.id.cartTableLayout);
         sendOrder = view.findViewById(R.id.send_order);
-        cartFilesList = new ArrayList<>();
 
-        mainActivity.getRequest("requestCart", 1L);
-
+        mainActivity.reloadCartTable();
         return placeholder;
     }
 
@@ -53,13 +47,13 @@ public class CartFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         sendOrder.setOnClickListener(vi -> {
-            // mainActivity.getRequest("getOrder", 1L);
-            mainActivity.postRequest("ул. Сталина, д.2", "+7 926 234-56-78");
+
+            mainActivity.postRequest("createOrder");
 
             View newView = mInflater.inflate(R.layout.order_content, mContainer, false);
             placeholder.removeAllViews();
             placeholder.addView(newView);
         });
-
     }
+
 }

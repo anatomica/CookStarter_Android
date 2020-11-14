@@ -46,12 +46,16 @@ public class MainActivity extends AppCompatActivity {
         httpClients.getRequest(type, id);
     }
 
-    public void postRequest(String address, String phone)  {
-        httpClients.postRequest(address, phone);
+    public void postRequest(String request)  {
+        httpClients.postRequest(request);
     }
 
     public void getFilter(String query) {
         buttonsCreate.restaurantsAdapter.getFilter().filter(query);
+    }
+
+    public void reloadCartTable() {
+        buttonsCreate.reloadCartTable();
     }
 
     public void serviceMessage(String message) {
