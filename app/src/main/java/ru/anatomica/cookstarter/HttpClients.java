@@ -54,7 +54,7 @@ public class HttpClients {
     public static List<Bitmap> imagesRestaurants = new ArrayList<>();
     public static List<Bitmap> imagesMenus = new ArrayList<>();
     private Bitmap image;
-    private int countOfRestaurants = 1;
+    private int countOfRestaurants = 0;
     private int countOfMenus = 0;
 
     public HttpClients() {
@@ -102,33 +102,39 @@ public class HttpClients {
                         case ("restaurants"):
                             restaurantsList = mapper.readValue(json, new TypeReference<List<Restaurant>>(){});
                             restaurantsList.forEach(x -> System.out.println(x.getId() + ": " + x.getName() + ": " + x.getPictureId()));
-                            restaurantsList.forEach(x -> mainActivity.getRequest("getRestaurantPicture", (long) x.getPictureId()));
+                            // restaurantsList.forEach(x -> mainActivity.getRequest("getRestaurantPicture", (long) x.getPictureId()));
+                            mainActivity.getRequest("getRestaurantPicture", (long) restaurantsList.get(0).getPictureId());
                             break;
                         case ("restaurantMenu"):
                             restaurantListsMenu = mapper.readValue(json, new TypeReference<List<RestaurantMenu>>(){});
                             restaurantListsMenu.forEach(x -> System.out.println(x.getName() + ": " + x.getPrice() + ": " + x.getPictureId()));
-                            restaurantListsMenu.forEach(x -> mainActivity.getRequest("getMenuPicture", (long) x.getPictureId()));
+                            // restaurantListsMenu.forEach(x -> mainActivity.getRequest("getMenuPicture", (long) x.getPictureId()));
+                            mainActivity.getRequest("getMenuPicture", (long) restaurantListsMenu.get(0).getPictureId());
                             break;
                         case ("getRestaurantPicture"):
-                            if (countOfRestaurants <= restaurantsList.size())  {
-                                image = BitmapFactory.decodeByteArray(response, 0, response.length);
-                                imagesRestaurants.add(image);
-                                countOfRestaurants++;
-                            }
+                            image = BitmapFactory.decodeByteArray(response, 0, response.length);
+                            imagesRestaurants.add(image);
+                            countOfRestaurants++;
                             if (countOfRestaurants == restaurantsList.size())  {
                                 loadRestaurants.callBack();
-                                countOfRestaurants = 1;
+                                countOfRestaurants = 0;
+                                break;
+                            }
+                            if (countOfRestaurants < restaurantsList.size())  {
+                                mainActivity.getRequest("getRestaurantPicture", (long) restaurantsList.get(countOfRestaurants).getPictureId());
                             }
                             break;
                         case ("getMenuPicture"):
-                            if (countOfMenus <= restaurantListsMenu.size())  {
-                                image = BitmapFactory.decodeByteArray(response, 0, response.length);
-                                imagesMenus.add(image);
-                                countOfMenus++;
-                            }
+                            image = BitmapFactory.decodeByteArray(response, 0, response.length);
+                            imagesMenus.add(image);
+                            countOfMenus++;
                             if (countOfMenus == restaurantListsMenu.size())  {
                                 loadRestaurantsMenu.callBack();
                                 countOfMenus = 0;
+                                break;
+                            }
+                            if (countOfMenus < restaurantListsMenu.size())  {
+                                mainActivity.getRequest("getMenuPicture", (long) restaurantListsMenu.get(countOfMenus).getPictureId());
                             }
                             break;
                         case ("addToCart"):

@@ -1,5 +1,6 @@
 package ru.anatomica.cookstarter;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FragmentManager fm = getFragmentManager();
+        fm.addOnBackStackChangedListener(() -> {
+            if(getFragmentManager().getBackStackEntryCount() == 0)
+                finish();
+        });
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration

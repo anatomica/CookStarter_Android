@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         });
 
-        getToken("100", "100");
+        // getToken("100", "100");
     }
 
     private void updateUiWithUser(LoggedInUserView model) {

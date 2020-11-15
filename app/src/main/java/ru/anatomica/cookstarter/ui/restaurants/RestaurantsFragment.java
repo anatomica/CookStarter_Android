@@ -22,12 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 import ru.anatomica.cookstarter.HttpClients;
 import ru.anatomica.cookstarter.MainActivity;
+import ru.anatomica.cookstarter.OnBackPressedListener;
 import ru.anatomica.cookstarter.R;
 import ru.anatomica.cookstarter.entity.Order;
 import ru.anatomica.cookstarter.entity.Restaurant;
 import ru.anatomica.cookstarter.entity.RestaurantMenu;
 
-public class RestaurantsFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class RestaurantsFragment extends Fragment implements SearchView.OnQueryTextListener, OnBackPressedListener {
 
     public static ListView restaurantsList;
     public static List<Order> cartFilesList = new ArrayList<>();
@@ -60,6 +61,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
         restaurantsViewModel = ViewModelProviders.of(this).get(RestaurantsViewModel.class);
         mInflater = inflater;
         mContainer = container;
+        HttpClients.imagesMenus.clear();
 
         View view = inflater.inflate(R.layout.fragment_restaurant, container,false);
         placeholder = (ViewGroup) view;
@@ -157,4 +159,8 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
         return false;
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }
