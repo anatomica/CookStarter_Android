@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
         httpClients.postRequest(request);
     }
 
+    public void setStatus()  {
+        httpClients.setStatus();
+    }
+
     public void getFilter(String query) {
         buttonsCreate.restaurantsAdapter.getFilter().filter(query);
     }

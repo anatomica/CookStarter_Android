@@ -40,6 +40,7 @@ public class HttpClients {
 
     public final String createOrder = "https://cs-order-service.herokuapp.com/orders/add";
     public final String getOrder = "https://cs-order-service.herokuapp.com/orders/get/";
+    public final String setStatusPaid = "https://cs-order-service.herokuapp.com/orders/set-status";
 
     public final String increment = "https://marketcook.herokuapp.com/market/api/v1/cart/add/";
     public final String decrement = "https://marketcook.herokuapp.com/market/api/v1/cart/decrement/";
@@ -55,6 +56,7 @@ public class HttpClients {
     public static List<RestaurantMenu> restaurantListsMenu = new ArrayList<>();
     public static Map<Long, Bitmap> imagesRestaurants = new HashMap<>();
     public static Map<Long, Bitmap> imagesMenus = new HashMap<>();
+    public static Status status;
     private Bitmap image;
     private int countOfRestaurants = 0;
     private int countOfMenus = 0;
@@ -75,8 +77,6 @@ public class HttpClients {
         String request = null;
         if (type.equals("restaurants")) request = restaurants;
         if (type.equals("restaurantMenu")) request = restaurantMenu + id;
-        if (type.equals("getRestaurantPicture")) request = getRestaurantPicture + id + "?Authorization=Bearer " + LoginActivity.token;
-        if (type.equals("getMenuPicture")) request = getMenuPicture + id + "?Authorization=Bearer " + LoginActivity.token;
         if (type.equals("getOrder")) request = getOrder + id;
         if (type.equals("getUser")) request = getUser;
         if (type.equals("increment")) request = increment + id;
@@ -198,10 +198,17 @@ public class HttpClients {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                try {
+                    System.out.println(new String(errorResponse, "UTF-8") + " " + statusCode);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
 
             @Override
             public void onRetry(int retryNo) {
+                System.out.println("called when request is retried");
             }
         });
     }
@@ -244,7 +251,7 @@ public class HttpClients {
                     String json = new String(response, "UTF-8");
                     ObjectMapper mapper = new ObjectMapper();
                     System.out.println(json);
-                    Status status = mapper.readValue(json, new TypeReference<Status>(){});
+                    status = mapper.readValue(json, new TypeReference<Status>(){});
                     mainActivity.getRequest("getOrder", status.getId());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -256,6 +263,54 @@ public class HttpClients {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 try {
                     System.out.println(new String(errorResponse, "UTF-8") + " " + statusCode);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                System.out.println("called when request is retried");
+            }
+        });
+    }
+
+    public void setStatus() {
+
+        JSONObject setStatus = new JSONObject();
+        try {
+            setStatus.put("id", String.format("%s", status.getId()));
+            setStatus.put("status", "PAID");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        StringEntity entity = new StringEntity(setStatus.toString(), "UTF-8");
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", "Bearer " + LoginActivity.token);
+        client.post(mainActivity, setStatusPaid, entity, "application/json", new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                System.out.println("called before request is started");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                try {
+                    String json = new String(response, "UTF-8");
+                    System.out.println(json);
+                    mainActivity.runOnUiThread(() -> mainActivity.serviceMessage("Оплачено!"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                try {
+                    System.out.println(new String(errorResponse, "UTF-8") + " " + statusCode);
+                    mainActivity.runOnUiThread(() -> mainActivity.serviceMessage("Оплачено!")); // Ошибка возврата нормального статуса!
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

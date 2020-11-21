@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import ru.anatomica.cookstarter.HttpClients;
 import ru.anatomica.cookstarter.MainActivity;
 import ru.anatomica.cookstarter.R;
 
@@ -22,6 +24,7 @@ public class CartFragment extends Fragment {
 
     public static TableLayout cartTableLayout;
     public static Button sendOrder;
+    public static Button paidOrder;
 
     @Override
     public void onAttach(Activity activity) {
@@ -53,6 +56,11 @@ public class CartFragment extends Fragment {
             View newView = mInflater.inflate(R.layout.order_content, mContainer, false);
             placeholder.removeAllViews();
             placeholder.addView(newView);
+            paidOrder = newView.findViewById(R.id.paid_order);
+
+            paidOrder.setOnClickListener(v -> {
+                mainActivity.setStatus();
+            });
         });
     }
 
