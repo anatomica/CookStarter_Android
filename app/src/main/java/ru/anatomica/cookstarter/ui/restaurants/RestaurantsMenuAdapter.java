@@ -64,8 +64,7 @@ public class RestaurantsMenuAdapter extends ArrayAdapter<RestaurantMenu> impleme
 
         RestaurantMenu restaurant = restaurants.get(position);
 
-        // logoView.setImageResource(restaurant.getPictureId());
-        logoView.setImageBitmap(HttpClients.imagesMenus.get(position));
+        logoView.setImageBitmap(HttpClients.imagesMenus.get(HttpClients.restaurantListsMenu.get(position).getId()));
         nameView.setText(restaurant.getName());
         addressView.setText(restaurant.getPrice().toString() + " руб.");
 

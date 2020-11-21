@@ -2,33 +2,33 @@ package ru.anatomica.cookstarter.entity;
 
 public class Token {
 
-    private int id;
-    private String name;
+    private Long userId;
+    private Long restaurantId;
     private String token;
 
     public Token() {
     }
 
-    public Token(int id, String name, String token) {
-        this.id = id;
-        this.name = name;
+    public Token(Long userId, Long restaurantId, String token) {
+        this.userId = userId;
+        this.restaurantId = restaurantId;
         this.token = token;
     }
 
-    public int getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public Long getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRestaurantId(Long restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     public String getToken() {

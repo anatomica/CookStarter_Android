@@ -7,19 +7,19 @@ public class Restaurant {
     private String description;
     private String address;
     private String telephone;
-    private int pictureId;
+    private Long pictureId;
 
     public Restaurant() {
     }
 
-    public Restaurant(Long id, String name, String address, int pictureId) {
+    public Restaurant(Long id, String name, String address, Long pictureId) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.pictureId = pictureId;
     }
 
-    public Restaurant(Long id, String name, String description, String address, String telephone, int pictureId) {
+    public Restaurant(Long id, String name, String description, String address, String telephone, Long pictureId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -68,11 +68,11 @@ public class Restaurant {
         this.telephone = telephone;
     }
 
-    public int getPictureId() {
+    public Long getPictureId() {
         return pictureId;
     }
 
-    public void setPictureId(int pictureId) {
+    public void setPictureId(Long pictureId) {
         this.pictureId = pictureId;
     }
 }

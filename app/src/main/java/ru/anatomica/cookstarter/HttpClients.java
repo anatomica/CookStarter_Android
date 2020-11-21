@@ -11,7 +11,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import ru.anatomica.cookstarter.entity.*;
@@ -51,8 +53,8 @@ public class HttpClients {
 
     public static List<Restaurant> restaurantsList = new ArrayList<>();
     public static List<RestaurantMenu> restaurantListsMenu = new ArrayList<>();
-    public static List<Bitmap> imagesRestaurants = new ArrayList<>();
-    public static List<Bitmap> imagesMenus = new ArrayList<>();
+    public static Map<Long, Bitmap> imagesRestaurants = new HashMap<>();
+    public static Map<Long, Bitmap> imagesMenus = new HashMap<>();
     private Bitmap image;
     private int countOfRestaurants = 0;
     private int countOfMenus = 0;
@@ -102,40 +104,12 @@ public class HttpClients {
                         case ("restaurants"):
                             restaurantsList = mapper.readValue(json, new TypeReference<List<Restaurant>>(){});
                             restaurantsList.forEach(x -> System.out.println(x.getId() + ": " + x.getName() + ": " + x.getPictureId()));
-                            // restaurantsList.forEach(x -> mainActivity.getRequest("getRestaurantPicture", (long) x.getPictureId()));
-                            mainActivity.getRequest("getRestaurantPicture", (long) restaurantsList.get(0).getPictureId());
+                            restaurantsList.forEach(x -> getPicture("getRestaurantPicture", x.getId(), x.getPictureId()));
                             break;
                         case ("restaurantMenu"):
                             restaurantListsMenu = mapper.readValue(json, new TypeReference<List<RestaurantMenu>>(){});
                             restaurantListsMenu.forEach(x -> System.out.println(x.getName() + ": " + x.getPrice() + ": " + x.getPictureId()));
-                            // restaurantListsMenu.forEach(x -> mainActivity.getRequest("getMenuPicture", (long) x.getPictureId()));
-                            mainActivity.getRequest("getMenuPicture", (long) restaurantListsMenu.get(0).getPictureId());
-                            break;
-                        case ("getRestaurantPicture"):
-                            image = BitmapFactory.decodeByteArray(response, 0, response.length);
-                            imagesRestaurants.add(image);
-                            countOfRestaurants++;
-                            if (countOfRestaurants == restaurantsList.size())  {
-                                loadRestaurants.callBack();
-                                countOfRestaurants = 0;
-                                break;
-                            }
-                            if (countOfRestaurants < restaurantsList.size())  {
-                                mainActivity.getRequest("getRestaurantPicture", (long) restaurantsList.get(countOfRestaurants).getPictureId());
-                            }
-                            break;
-                        case ("getMenuPicture"):
-                            image = BitmapFactory.decodeByteArray(response, 0, response.length);
-                            imagesMenus.add(image);
-                            countOfMenus++;
-                            if (countOfMenus == restaurantListsMenu.size())  {
-                                loadRestaurantsMenu.callBack();
-                                countOfMenus = 0;
-                                break;
-                            }
-                            if (countOfMenus < restaurantListsMenu.size())  {
-                                mainActivity.getRequest("getMenuPicture", (long) restaurantListsMenu.get(countOfMenus).getPictureId());
-                            }
+                            restaurantListsMenu.forEach(x -> getPicture("getMenuPicture", x.getId(), x.getPictureId()));
                             break;
                         case ("addToCart"):
                             mainActivity.runOnUiThread(() -> mainActivity.serviceMessage("Добавлено"));
@@ -173,6 +147,61 @@ public class HttpClients {
             @Override
             public void onRetry(int retryNo) {
                 System.out.println("called when request is retried");
+            }
+        });
+    }
+
+    public void getPicture(String type, Long id, Long pictureId) {
+
+        String request = null;
+        if (type.equals("getRestaurantPicture")) request = getRestaurantPicture + pictureId + "?Authorization=Bearer " + LoginActivity.token;
+        if (type.equals("getMenuPicture")) request = getMenuPicture + pictureId + "?Authorization=Bearer " + LoginActivity.token;
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", "Bearer " + LoginActivity.token);
+        client.get(request, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                System.out.println("called before request is started");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                try {
+                    switch (type) {
+                        case ("getRestaurantPicture"):
+                            image = BitmapFactory.decodeByteArray(response, 0, response.length);
+                            imagesRestaurants.put(id, image);
+                            countOfRestaurants++;
+                            if (countOfRestaurants == restaurantsList.size())  {
+                                loadRestaurants.callBack();
+                                countOfRestaurants = 0;
+                                break;
+                            }
+                            break;
+                        case ("getMenuPicture"):
+                            image = BitmapFactory.decodeByteArray(response, 0, response.length);
+                            imagesMenus.put(id, image);
+                            countOfMenus++;
+                            if (countOfMenus == restaurantListsMenu.size()) {
+                                loadRestaurantsMenu.callBack();
+                                countOfMenus = 0;
+                                break;
+                            }
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
             }
         });
     }

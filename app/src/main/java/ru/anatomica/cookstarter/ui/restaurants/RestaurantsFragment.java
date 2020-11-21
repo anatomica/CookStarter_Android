@@ -114,7 +114,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
                 itemMenuName.setText(nameItemMenu);
                 itemMenuPrice.setText(price + " руб.");
 
-                imageView.setImageBitmap(HttpClients.imagesMenus.get(position));
+                imageView.setImageBitmap(HttpClients.imagesMenus.get(HttpClients.restaurantListsMenu.get(position).getId()));
                 quantity.setTextSize(40);
                 quantity.setText("1");
                 quantity.setGravity(Gravity.CENTER | Gravity.BOTTOM);

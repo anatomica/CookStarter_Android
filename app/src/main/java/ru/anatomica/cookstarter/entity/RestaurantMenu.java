@@ -9,25 +9,19 @@ public class RestaurantMenu {
     private String description;
     private BigDecimal price;
     private Long restaurantId;
-    private int pictureId;
+    private Long pictureId;
 
     public RestaurantMenu() {
     }
 
-    public RestaurantMenu(String name, BigDecimal price, int pictureId) {
-        this.name = name;
-        this.price = price;
-        this.pictureId = pictureId;
-    }
-
-    public RestaurantMenu(Long id, String name, BigDecimal price, int pictureId) {
+    public RestaurantMenu(Long id, String name, BigDecimal price, Long pictureId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.pictureId = pictureId;
     }
 
-    public RestaurantMenu(Long id, String name, String description, BigDecimal price, Long restaurantId, int pictureId) {
+    public RestaurantMenu(Long id, String name, String description, BigDecimal price, Long restaurantId, Long pictureId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -76,11 +70,11 @@ public class RestaurantMenu {
         this.restaurantId = restaurantId;
     }
 
-    public int getPictureId() {
+    public Long getPictureId() {
         return pictureId;
     }
 
-    public void setPictureId(int pictureId) {
+    public void setPictureId(Long pictureId) {
         this.pictureId = pictureId;
     }
 }
