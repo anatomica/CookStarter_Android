@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.material.textfield.TextInputEditText;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.json.JSONException;
@@ -24,7 +25,7 @@ import ru.anatomica.cookstarter.ui.login.LoginActivity;
 public class RegisterActivity extends AppCompatActivity {
 
     private Button buttonReg;
-    private EditText editPhone, editPassword, editConfirmPass, editFirstName, editLastName, editEmail;
+    private TextInputEditText editPhone, editPassword, editConfirmPass, editFirstName, editLastName, editEmail;
     public static List<Token> tokenList;
     public static String token;
 
