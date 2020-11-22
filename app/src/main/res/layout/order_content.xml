@@ -21,4 +21,17 @@
             android:text="Ваш заказ успешно оформлен!" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="50"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/paid_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Оплатить заказ!" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -1,5 +1,6 @@
 package ru.anatomica.cookstarter;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FragmentManager fm = getFragmentManager();
+        fm.addOnBackStackChangedListener(() -> {
+            if(getFragmentManager().getBackStackEntryCount() == 0)
+                finish();
+        });
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration
@@ -32,20 +38,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        // shutdown();
+        // super.onBackPressed();
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        if (count == 0) {
+            super.onBackPressed();
+            // additional code
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 
     public void getRequest(String type, Long id) {
         httpClients.getRequest(type, id);
     }
 
-    public void postRequest(String address, String phone)  {
-        httpClients.postRequest(address, phone);
+    public void postRequest(String request)  {
+        httpClients.postRequest(request);
+    }
+
+    public void setStatus()  {
+        httpClients.setStatus();
     }
 
     public void getFilter(String query) {
         buttonsCreate.restaurantsAdapter.getFilter().filter(query);
+    }
+
+    public void reloadCartTable() {
+        buttonsCreate.reloadCartTable();
     }
 
     public void serviceMessage(String message) {

@@ -7,25 +7,25 @@ public class Restaurant {
     private String description;
     private String address;
     private String telephone;
-    private int logoId;
+    private Long pictureId;
 
     public Restaurant() {
     }
 
-    public Restaurant(Long id, String name, String address, int logoId) {
+    public Restaurant(Long id, String name, String address, Long pictureId) {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.logoId = logoId;
+        this.pictureId = pictureId;
     }
 
-    public Restaurant(Long id, String name, String description, String address, String telephone, int logoId) {
+    public Restaurant(Long id, String name, String description, String address, String telephone, Long pictureId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.address = address;
         this.telephone = telephone;
-        this.logoId = logoId;
+        this.pictureId = pictureId;
     }
 
     public Long getId() {
@@ -68,11 +68,11 @@ public class Restaurant {
         this.telephone = telephone;
     }
 
-    public int getLogoId() {
-        return logoId;
+    public Long getPictureId() {
+        return pictureId;
     }
 
-    public void setLogoId(int logoId) {
-        this.logoId = logoId;
+    public void setPictureId(Long pictureId) {
+        this.pictureId = pictureId;
     }
 }

@@ -14,7 +14,6 @@
         android:layout_weight="50"
         android:gravity="center"/>
 
-    <!-- ++ Mostovaya -->
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -35,7 +34,6 @@
         android:fontFamily="sans-serif"
         android:textSize="20sp"
         android:textColor="#FF009688"/>
-    <!-- Mostovaya -->
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -46,7 +44,7 @@
             android:id="@+id/minus"
             android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="70dp"
             android:layout_marginStart="10dp"
             android:text="-" />
 
@@ -54,20 +52,20 @@
             android:id="@+id/quantity"
             android:layout_width="40dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="100dp" />
+            android:layout_marginBottom="70dp" />
 
         <Button
             android:id="@+id/plus"
             android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="70dp"
             android:text="+" />
 
         <Button
             android:id="@+id/addToCart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="70dp"
             android:layout_marginStart="30dp"
             android:text="Добавить в заказ" />
 

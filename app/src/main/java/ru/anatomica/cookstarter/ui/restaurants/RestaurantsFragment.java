@@ -1,5 +1,6 @@
 package ru.anatomica.cookstarter.ui.restaurants;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -13,21 +14,24 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-
 import java.math.BigDecimal;
-
+import java.util.ArrayList;
+import java.util.List;
+import ru.anatomica.cookstarter.HttpClients;
 import ru.anatomica.cookstarter.MainActivity;
+import ru.anatomica.cookstarter.OnBackPressedListener;
 import ru.anatomica.cookstarter.R;
+import ru.anatomica.cookstarter.entity.Order;
 import ru.anatomica.cookstarter.entity.Restaurant;
 import ru.anatomica.cookstarter.entity.RestaurantMenu;
 
-public class RestaurantsFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class RestaurantsFragment extends Fragment implements SearchView.OnQueryTextListener, OnBackPressedListener {
 
     public static ListView restaurantsList;
+    public static List<Order> cartFilesList = new ArrayList<>();
 
     private RestaurantsViewModel restaurantsViewModel;
     private MainActivity mainActivity;
@@ -41,14 +45,11 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
     private ImageView imageView;
     private Button addToCart;
     private TextView quantity;
-
-    //++ Mostovaya
     private TextView itemMenuPrice;
     private TextView itemMenuName;
     private Button addCount;
     private Button removeCount;
-    //-- Mostovaya
-
+    private int currentCount = 1;
 
     @Override
     public void onAttach(Activity activity) {
@@ -60,6 +61,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
         restaurantsViewModel = ViewModelProviders.of(this).get(RestaurantsViewModel.class);
         mInflater = inflater;
         mContainer = container;
+        HttpClients.imagesMenus.clear();
 
         View view = inflater.inflate(R.layout.fragment_restaurant, container,false);
         placeholder = (ViewGroup) view;
@@ -81,6 +83,7 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        @SuppressLint("SetTextI18n")
         AdapterView.OnItemClickListener itemListener = (parent, v, position, id) -> {
             // получаем выбранный пункт
             Object o = parent.getItemAtPosition(position);
@@ -91,11 +94,6 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
             }
             if (o.getClass().getSimpleName().equals("RestaurantMenu")) {
                 RestaurantMenu selectedMenuItem = (RestaurantMenu) parent.getItemAtPosition(position);
-                //++ Mostovaya
-                String nameItemMenu = selectedMenuItem.getTitle();
-                BigDecimal price = selectedMenuItem.getPrice();
-                String description = selectedMenuItem.getDescription();
-                //-- Mostovaya
 
                 View newView = mInflater.inflate(R.layout.restaurant_item, mContainer, false);
                 placeholder.removeAllViews();
@@ -104,44 +102,45 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
                 imageView = newView.findViewById(R.id.main_logo);
                 addToCart = newView.findViewById(R.id.addToCart);
                 quantity = newView.findViewById(R.id.quantity);
-                //++ Mostovaya
                 addCount = newView.findViewById(R.id.plus);
                 removeCount = newView.findViewById(R.id.minus);
                 itemMenuName = newView.findViewById(R.id.itemMenuName);
                 itemMenuPrice = newView.findViewById(R.id.itemMenuPrice);
-                itemMenuName.setText(nameItemMenu);
-                itemMenuPrice.setText(price.toString());
-                //-- Mostovaya
 
-                imageView.setImageResource(selectedMenuItem.getLogoId());
+                String nameItemMenu = selectedMenuItem.getName();
+                BigDecimal price = selectedMenuItem.getPrice();
+                String description = selectedMenuItem.getDescription();
+
+                itemMenuName.setText(nameItemMenu);
+                itemMenuPrice.setText(price + " руб.");
+
+                imageView.setImageBitmap(HttpClients.imagesMenus.get(HttpClients.restaurantListsMenu.get(position).getId()));
                 quantity.setTextSize(40);
                 quantity.setText("1");
                 quantity.setGravity(Gravity.CENTER | Gravity.BOTTOM);
                 addToCart.setOnClickListener(vi -> {
-                    mainActivity.getRequest("addToCart", selectedMenuItem.getId());
+                    Order order = new Order();
+                    order.setId(selectedMenuItem.getId());
+                    order.setName(selectedMenuItem.getName());
+                    order.setPrice(selectedMenuItem.getPrice());
+                    order.setRestaurantId(selectedMenuItem.getRestaurantId());
+                    order.setQuantity(currentCount);
+                    cartFilesList.add(order);
                 });
 
-                //++ Mostovaya
-                addCount.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int currentCount = new Integer((String) quantity.getText());
-                        currentCount++;
+                addCount.setOnClickListener(view1 -> {
+                    currentCount = Integer.parseInt(quantity.getText().toString());
+                    currentCount++;
+                    quantity.setText(Integer.toString(currentCount));
+                });
+
+                removeCount.setOnClickListener(view2 -> {
+                    currentCount = Integer.parseInt(quantity.getText().toString());
+                    if (currentCount > 1) {
+                        currentCount--;
                         quantity.setText(Integer.toString(currentCount));
                     }
                 });
-
-                removeCount.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int currentCount = new Integer((String) quantity.getText());
-                        if (currentCount!=1) {
-                            currentCount--;
-                            quantity.setText(Integer.toString(currentCount));
-                        }
-                    }
-                });
-                //-- Mostovaya
             }
         };
 
@@ -160,4 +159,8 @@ public class RestaurantsFragment extends Fragment implements SearchView.OnQueryT
         return false;
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }
