@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.material.textfield.TextInputEditText;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.json.JSONException;
@@ -33,8 +34,8 @@ import ru.anatomica.cookstarter.entity.Token;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText usernameEditText;
-    private EditText passwordEditText;
+    private TextInputEditText usernameEditText;
+    private TextInputEditText passwordEditText;
     private LoginViewModel loginViewModel;
 
     public static List<Token> tokenList;
@@ -122,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         });
 
-        getToken("100", "100");
+        //getToken("100", "100");
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
