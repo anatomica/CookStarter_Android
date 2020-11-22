@@ -11,100 +11,153 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".RegisterActivity">
 
-
-
-    <EditText
-        android:id="@+id/editPhone"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editPhoneLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:ems="10"
-        android:hint="@string/desired_phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:hintTextAppearance="@style/HintText">
 
-        android:inputType="textPersonName"
-        android:singleLine="true"
-        tools:ignore="MissingConstraints">
-    </EditText>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/desired_phone"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            tools:ignore="MissingConstraints"/>
 
-    <EditText
-        android:id="@+id/editPassword"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editPasswordLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        app:passwordToggleEnabled="true"
+        android:ems="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:hintTextAppearance="@style/HintText"
+        app:layout_constraintTop_toBottomOf="@+id/editPhoneLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_password"
+            android:inputType="textPassword"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            tools:ignore="MissingConstraints"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editConfirmPassLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        app:passwordToggleEnabled="true"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:hintTextAppearance="@style/HintText"
+        app:layout_constraintTop_toBottomOf="@+id/editPasswordLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editConfirmPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/re_enter_password"
+            android:inputType="textPassword"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            tools:ignore="MissingConstraints"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editFirstNameLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:ems="10"
-        android:hint="@string/enter_password"
-        android:inputType="textPassword"
-        android:singleLine="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:hintTextAppearance="@style/HintText"
+        app:layout_constraintTop_toBottomOf="@+id/editConfirmPassLayout">
 
-        app:layout_constraintTop_toBottomOf="@+id/editPhone"
-        tools:ignore="MissingConstraints">
-    </EditText>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/desired_username"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            tools:ignore="MissingConstraints"/>
 
-    <EditText
-        android:id="@+id/editConfirmPass"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editLastNameLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:ems="10"
-        android:hint="@string/re_enter_password"
-        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:hintTextAppearance="@style/HintText"
+        app:layout_constraintTop_toBottomOf="@+id/editFirstNameLayout">
 
-        android:singleLine="true"
-        app:layout_constraintTop_toBottomOf="@+id/editPassword"
-        tools:ignore="MissingConstraints">
-    </EditText>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_your_last_name"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            tools:ignore="MissingConstraints"/>
 
-    <EditText
-        android:id="@+id/editFirstName"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editEmailLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:ems="10"
-        android:hint="@string/desired_username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:hintTextAppearance="@style/HintText"
+        app:layout_constraintTop_toBottomOf="@+id/editLastNameLayout">
 
-        android:inputType="textPersonName"
-        android:singleLine="true"
-        app:layout_constraintTop_toBottomOf="@+id/editConfirmPass"
-        tools:ignore="MissingConstraints">
-    </EditText>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_your_last_name"
+            android:inputType="textEmailAddress"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            tools:ignore="MissingConstraints"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/editLastName"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:hint="@string/enter_your_last_name"
-
-        android:inputType="textPersonName"
-        android:singleLine="true"
-        app:layout_constraintTop_toBottomOf="@+id/editFirstName"
-        tools:ignore="MissingConstraints">
-    </EditText>
-
-    <EditText
-        android:id="@+id/editEmail"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:hint="@string/enter_valid_email"
-
-        android:inputType="textEmailAddress"
-        android:singleLine="true"
-        app:layout_constraintTop_toBottomOf="@+id/editLastName"
-        tools:ignore="MissingConstraints">
-    </EditText>
-
-    <Button
+    <Button style="@style/butRegister"
         android:id="@+id/register"
-
         android:layout_gravity="start"
         android:layout_width="200dp"
         android:layout_height="53dp"
@@ -113,21 +166,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
-        android:layout_marginBottom="56dp"/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        android:layout_marginBottom="56dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

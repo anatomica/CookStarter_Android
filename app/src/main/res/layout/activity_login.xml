@@ -41,12 +41,13 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
+        app:passwordToggleEnabled="true"
         app:counterEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toBottomOf="@+id/usernameLayout"
         app:hintTextAppearance="@style/HintText">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
             android:layout_width="match_parent"
@@ -77,7 +78,7 @@
             app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
             app:layout_constraintVertical_bias="0.2" />
 
-        <Button
+        <Button style="@style/butRegister"
             android:id="@+id/register"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
@@ -88,8 +89,6 @@
             android:layout_marginBottom="64dp"
             android:enabled="true"
             android:text="@string/action_register"
-            android:background="@color/colorPrimary"
-            android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
